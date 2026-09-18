@@ -1,0 +1,36 @@
+# Cartelle generate automaticamente da Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+
+# Asset store e cache pacchetti
+/[Aa]ssets/[Aa]ssetStoreTools*
+
+# File di progetto IDE (Visual Studio, VS Code, Rider)
+.vs/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+
+# Build Android
+*.apk
+*.aab
+
+# File di sistema OS
+.DS_Store
+Thumbs.db
