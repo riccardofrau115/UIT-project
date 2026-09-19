@@ -34,3 +34,6 @@
 # File di sistema OS
 .DS_Store
 Thumbs.db
+
+
+.utmp*
