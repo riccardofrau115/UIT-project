@@ -13,6 +13,7 @@
 
 # File di progetto IDE (Visual Studio, VS Code, Rider)
 .vs/
+.vscode/
 .idea/
 *.csproj
 *.unityproj
