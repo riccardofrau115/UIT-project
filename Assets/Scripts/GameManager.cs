@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Stato Attuale")]
+    [SerializeField] private GameState startState = GameState.Calibration;
     [SerializeField] private GameState currentState;
     public GameState CurrentState => currentState;
 
@@ -20,9 +21,18 @@ public class GameManager : MonoBehaviour
     [Header("Eventi")]
     public UnityEvent<GameState> OnStateChanged;
 
+    // true dopo la prima transizione: evita che l'early return di Transition()
+    // blocchi l'avvio quando startState coincide con il valore di default dell'enum
+    private bool hasState;
+
+    // Transizioni richieste mentre ne è in corso un'altra (es. da EnterState):
+    // vengono eseguite in coda, così OnStateChanged scatta nell'ordine corretto
+    private bool isTransitioning;
+    private readonly Queue<GameState> pendingStates = new Queue<GameState>();
+
     private void Awake()
     {
-        if (Instance != null && Instance != deathInstanceCheck(this))
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
@@ -30,24 +40,57 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    private static GameManager deathInstanceCheck(GameManager current) => Instance;
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
 
     private void Start()
     {
-        // 1. Iniziamo sempre dalla calibrazione
-        ChangeState(GameState.Calibration);
+        // Iniziamo sempre dalla calibrazione
+        ChangeState(startState);
     }
 
     public void ChangeState(GameState newState)
     {
-        if (currentState == newState) return;
+        if (isTransitioning)
+        {
+            pendingStates.Enqueue(newState);
+            return;
+        }
 
-        ExitState(currentState);
+        isTransitioning = true;
+        try
+        {
+            Transition(newState);
+            while (pendingStates.Count > 0)
+                Transition(pendingStates.Dequeue());
+        }
+        finally
+        {
+            isTransitioning = false;
+            pendingStates.Clear();
+        }
+    }
+
+    private void Transition(GameState newState)
+    {
+        if (hasState && currentState == newState) return;
+
+        if (hasState) ExitState(currentState);
         currentState = newState;
+        hasState = true;
         EnterState(newState);
 
         OnStateChanged?.Invoke(newState);
         Debug.Log($"[GameManager] Nuovo Stato: {newState}");
+    }
+
+    // Unico punto in cui si mostra/nasconde una UI: qui si può sostituire
+    // SetActive con CanvasGroupFader.Show()/Hide()
+    private static void SetUI(GameObject ui, bool visible)
+    {
+        if (ui) ui.SetActive(visible);
     }
 
     #region Gestione Ingressi negli Stati
@@ -57,22 +100,22 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case GameState.Calibration:
-                if (calibrationUI) calibrationUI.SetActive(true);
+                SetUI(calibrationUI, true);
                 // Avvia Meta Scene API o raycast plane detection per il tavolo
                 break;
 
             case GameState.ModeSelect:
-                if (modeSelectUI) modeSelectUI.SetActive(true);
+                SetUI(modeSelectUI, true);
                 break;
 
             case GameState.Sandbox:
-                if (sandboxUI) sandboxUI.SetActive(true);
+                SetUI(sandboxUI, true);
                 // Attiva spawner libero di tutti gli atomi
                 break;
 
             case GameState.MissionInitialize:
                 SetupCurrentMission();
-                // Una volta caricati asset e vassoio, passa automaticamente all'assemblaggio
+                // Messo in coda: parte dopo OnStateChanged(MissionInitialize)
                 ChangeState(GameState.AssemblyInProgress);
                 break;
 
@@ -89,7 +132,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.MissionComplete:
-                if (missionCompleteUI) missionCompleteUI.SetActive(true);
+                SetUI(missionCompleteUI, true);
                 break;
         }
     }
@@ -103,16 +146,20 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case GameState.Calibration:
-                if (calibrationUI) calibrationUI.SetActive(false);
+                SetUI(calibrationUI, false);
                 break;
             case GameState.ModeSelect:
-                if (modeSelectUI) modeSelectUI.SetActive(false);
+                SetUI(modeSelectUI, false);
                 break;
             case GameState.Sandbox:
-                if (sandboxUI) sandboxUI.SetActive(false);
+                SetUI(sandboxUI, false);
+                break;
+            case GameState.RewardAndFeedback:
+                // Se si esce prima dei 2 secondi, l'Invoke non deve scattare
+                CancelInvoke(nameof(GoToMissionComplete));
                 break;
             case GameState.MissionComplete:
-                if (missionCompleteUI) missionCompleteUI.SetActive(false);
+                SetUI(missionCompleteUI, false);
                 break;
         }
     }
@@ -154,9 +201,10 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Formula errata: puoi dare feedback sonoro/visivo e mostrare riprova
+            // Formula errata: feedback e ritorno all'assemblaggio per riprovare
             Debug.Log("[GameManager] Formula non corretta!");
-            ChangeState(GameState.MissionComplete);
+            // TODO: feedback sonoro/visivo
+            ChangeState(GameState.AssemblyInProgress);
         }
     }
 
@@ -169,6 +217,7 @@ public class GameManager : MonoBehaviour
 
     private void GoToMissionComplete()
     {
+        if (currentState != GameState.RewardAndFeedback) return;
         ChangeState(GameState.MissionComplete);
     }
 
@@ -184,6 +233,7 @@ public class GameManager : MonoBehaviour
         ChangeState(GameState.MissionInitialize);
     }
 
+    // Chiamato anche dalla UI Sandbox (unica uscita da quello stato)
     public void BackToMenu()
     {
         ChangeState(GameState.ModeSelect);
