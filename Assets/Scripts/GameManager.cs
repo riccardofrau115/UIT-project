@@ -7,15 +7,16 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Stato Attuale")]
-    [SerializeField] private GameState startState = GameState.Calibration;
+    [SerializeField] private GameState startState = GameState.Start;
     [SerializeField] private GameState currentState;
     public GameState CurrentState => currentState;
 
-    [Header("Riferimenti Moduli")]
-    [SerializeField] private GameObject calibrationUI;
-    [SerializeField] private GameObject modeSelectUI;
-    [SerializeField] private GameObject sandboxUI;
-    [SerializeField] private GameObject missionCompleteUI;
+    [Header("Riferimenti Moduli (menu con CanvasGroupFader)")]
+    [SerializeField] private CanvasGroupFader startUI;
+    [SerializeField] private CanvasGroupFader calibrationUI;
+    [SerializeField] private CanvasGroupFader modeSelectUI;
+    [SerializeField] private CanvasGroupFader sandboxUI;
+    [SerializeField] private CanvasGroupFader missionCompleteUI;
     [SerializeField] private Transform tableAnchor; // Ancoraggio sul tavolo calibrato
 
     [Header("Eventi")]
@@ -47,7 +48,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // Iniziamo sempre dalla calibrazione
+        // Parte da tutti i menu nascosti, indipendentemente da come sono in scena
+        HideAllUI();
         ChangeState(startState);
     }
 
@@ -86,11 +88,19 @@ public class GameManager : MonoBehaviour
         Debug.Log($"[GameManager] Nuovo Stato: {newState}");
     }
 
-    // Unico punto in cui si mostra/nasconde una UI: qui si può sostituire
-    // SetActive con CanvasGroupFader.Show()/Hide()
-    private static void SetUI(GameObject ui, bool visible)
+    // Unico punto in cui si mostra/nasconde un menu: usa CanvasGroupFader, non SetActive
+    private static void SetUI(CanvasGroupFader ui, bool visible, bool instant = false)
     {
-        if (ui) ui.SetActive(visible);
+        if (ui) ui.SetVisible(visible, instant);
+    }
+
+    private void HideAllUI()
+    {
+        SetUI(startUI, false, true);
+        SetUI(calibrationUI, false, true);
+        SetUI(modeSelectUI, false, true);
+        SetUI(sandboxUI, false, true);
+        SetUI(missionCompleteUI, false, true);
     }
 
     #region Gestione Ingressi negli Stati
@@ -99,6 +109,10 @@ public class GameManager : MonoBehaviour
     {
         switch (state)
         {
+            case GameState.Start:
+                SetUI(startUI, true);
+                break;
+
             case GameState.Calibration:
                 SetUI(calibrationUI, true);
                 // Avvia Meta Scene API o raycast plane detection per il tavolo
@@ -145,6 +159,9 @@ public class GameManager : MonoBehaviour
     {
         switch (state)
         {
+            case GameState.Start:
+                SetUI(startUI, false);
+                break;
             case GameState.Calibration:
                 SetUI(calibrationUI, false);
                 break;
