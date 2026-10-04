@@ -1,24 +1,25 @@
 using UnityEngine;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class CanvasGroupFader : MonoBehaviour
 {
     [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] float animationSpeed = 10f;
-    [SerializeField] bool startVisible;
 
     bool visible;
 
     void Awake()
     {
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
-        SetVisible(startVisible, true);
     }
 
-    public void ToggleVisible() => SetVisible(!visible, false);
-    public void Show() => SetVisible(true, false);
-    public void Hide() => SetVisible(false, false);
+    // Per gli UnityEvent (OnClick ecc.)
+    public void ToggleVisible() => SetVisible(!visible);
+    public void Show() => SetVisible(true);
+    public void Hide() => SetVisible(false);
 
-    void SetVisible(bool value, bool instant)
+    // Da codice: instant = true salta la dissolvenza
+    public void SetVisible(bool value, bool instant = false)
     {
         visible = value;
         canvasGroup.interactable = value;
@@ -28,7 +29,12 @@ public class CanvasGroupFader : MonoBehaviour
 
     void Update()
     {
-        canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, visible ? 1f : 0f,
+        float target = visible ? 1f : 0f;
+        if (Mathf.Approximately(canvasGroup.alpha, target)) return;
+
+        canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, target,
                                        animationSpeed * Time.deltaTime);
+        if (Mathf.Abs(canvasGroup.alpha - target) < 0.01f)
+            canvasGroup.alpha = target;
     }
 }
