@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Oculus.Interaction;
+using UnityEngine.InputSystem; // Necessario per InputActionReference
 
 /// <summary>
 /// Rappresenta un singolo atomo che puo' legarsi ad altri atomi rispettando
@@ -66,6 +67,10 @@ public class Atomo : MonoBehaviour
              "punto esatto in cui viene lasciata (nessuna inerzia/lancio)")] */
     private bool fermaAlRilascio = true;
 
+    /* [Header("Input Legami Multipli")]
+    [Tooltip("Azione per cambiare il tipo di legame (es. Pinch con il medio, Tasto A/X del controller).")]
+    public InputActionReference avanzaOrdineAzione; */
+    
     [Header("Debug (sola lettura)")]
     [SerializeField]
     private List<Legame> legamiAttivi = new List<Legame>();
@@ -77,33 +82,21 @@ public class Atomo : MonoBehaviour
     // ------------------------------------------------------------------
     // Geometria: direzioni degli slot in spazio locale
     // ------------------------------------------------------------------
- 
-    private static readonly Vector3[] DirezioniUno =
-    {
-        Vector3.forward
-    };
- 
-    private static readonly Vector3[] DirezioniLineari =
-    {
-        Vector3.forward,
-        Vector3.back
-    };
- 
-    private static readonly Vector3[] DirezioniTrigonali =
-    {
+    
+    private static readonly Vector3[] DirezioniUno = { Vector3.forward };
+    private static readonly Vector3[] DirezioniLineari = { Vector3.forward, Vector3.back };
+    private static readonly Vector3[] DirezioniTrigonali = {
         new Vector3(0f, 0f, 1f),
         new Vector3(0.8660254f, 0f, -0.5f),
         new Vector3(-0.8660254f, 0f, -0.5f)
     };
- 
-    private static readonly Vector3[] DirezioniTetraedriche =
-    {
+    private static readonly Vector3[] DirezioniTetraedriche = {
         Vector3.up,
         new Vector3(0.9428091f, -0.3333333f, 0f),
         new Vector3(-0.4714045f, -0.3333333f, 0.8164966f),
         new Vector3(-0.4714045f, -0.3333333f, -0.8164966f)
     };
- 
+
     private static Vector3[] DirezioniPerSterico(int numeroSterico)
     {
         switch (numeroSterico)
@@ -114,7 +107,7 @@ public class Atomo : MonoBehaviour
             default: return DirezioniTetraedriche;
         }
     }
- 
+
     // ------------------------------------------------------------------
     // Proprieta' chimiche derivate
     // ------------------------------------------------------------------
@@ -132,18 +125,28 @@ public class Atomo : MonoBehaviour
             return elettroniValenza <= 1 ? 1 : Mathf.Clamp(8 - elettroniValenza, 0, 4);
         }
     }
- 
+
     /// <summary>Coppie di elettroni non condivise sull'atomo.</summary>
-    public int CoppieSolitarie =>
-        Mathf.Max(0, (elettroniValenza - NumeroLegamiMassimi) / 2);
- 
-    /// <summary>Domini elettronici totali = legami + coppie solitarie (1-4).</summary>
-    public int NumeroSterico =>
-        Mathf.Clamp(NumeroLegamiMassimi + CoppieSolitarie, Mathf.Max(1, NumeroLegamiMassimi), 4);
- 
-    public int LegamiDisponibili => NumeroLegamiMassimi - legamiAttivi.Count;
- 
-    public bool OttettoCompleto => LegamiDisponibili <= 0;
+    public int CoppieSolitarie => Mathf.Max(0, (elettroniValenza - NumeroLegamiMassimi) / 2);
+
+    // Domini elettronici attuali. I legami pi greco (multipli) non contano ai fini VSEPR.
+    public int NumeroSterico => Mathf.Clamp(NumeroLegamiMassimi + CoppieSolitarie - LegamiPiGreco, Mathf.Max(1, legamiAttivi.Count), 4);
+
+    // Valenze occupate dalla somma degli ordini di tutti i legami formati.
+    public int OrdineTotale
+    {
+        get
+        {
+            int tot = 0;
+            foreach (var l in legamiAttivi) tot += l.ordine;
+            return tot;
+        }
+    }
+
+    // Un doppio legame ha 1 legame pi greco, un triplo ne ha 2.
+    public int LegamiPiGreco => OrdineTotale - legamiAttivi.Count;
+    public int ValenzeLibere => NumeroLegamiMassimi - OrdineTotale;
+    public bool OttettoCompleto => ValenzeLibere <= 0;
 
     [System.Serializable]
     public class Legame
@@ -155,6 +158,7 @@ public class Atomo : MonoBehaviour
         public FixedJoint joint;
         // Indice dello slot geometrico occupato da questo legame.
         public int indiceSlot;
+        public int ordine; // Nuovo: traccia se è singolo(1), doppio(2) o triplo(3)
     }
 
     private void Awake()
@@ -169,6 +173,12 @@ public class Atomo : MonoBehaviour
         {
             grabbable.WhenPointerEventRaised += GestisciEventoPuntatore;
         }
+
+        /* if (avanzaOrdineAzione != null)
+        {
+            avanzaOrdineAzione.action.Enable();
+            avanzaOrdineAzione.action.performed += OnAvanzaOrdineInput;
+        } */
     }
 
     private void OnDestroy()
@@ -176,6 +186,22 @@ public class Atomo : MonoBehaviour
         if (grabbable != null)
         {
             grabbable.WhenPointerEventRaised -= GestisciEventoPuntatore;
+        }
+        
+        /* if (avanzaOrdineAzione != null)
+        {
+            avanzaOrdineAzione.action.performed -= OnAvanzaOrdineInput;
+        } */
+    }
+
+    private void Update()
+    {
+        Debug.Log($"[{simbolo}] inMano: {inMano}, Keyboard.current: {Keyboard.current}, bKey: {Keyboard.current?.bKey} wasPressedThisFrame: {Keyboard.current?.bKey.wasPressedThisFrame}");
+        // Debug da tastiera per l'Editor (compatibile con il nuovo Input System)
+        if (inMano && Keyboard.current!= null && Keyboard.current.bKey.wasPressedThisFrame)
+        {
+            Debug.Log($"B premuto per {simbolo}");
+            GestoreOrdineLegame.Instance.AvanzaOrdineLegame();
         }
     }
 
@@ -185,15 +211,12 @@ public class Atomo : MonoBehaviour
         {
             inMano = true;
         }
-        else if (evento.Type == PointerEventType.Cancel)
+        else if (evento.Type == PointerEventType.Cancel || evento.Type == PointerEventType.Unselect)
         {
             inMano = false;
-        }
-        else if (evento.Type == PointerEventType.Unselect)
-        {
-            inMano = false;
- 
-            if (fermaAlRilascio)
+            //ResetOrdine(); // Reset a singolo quando si rilascia l'atomo
+            
+            if (fermaAlRilascio && evento.Type == PointerEventType.Unselect)
             {
                 // Azzeriamo per qualche step fisico: un eventuale lancio
                 // dell'SDK o il joint residuo verso il proxy di grab
@@ -222,10 +245,7 @@ public class Atomo : MonoBehaviour
     /// </summary>
     public void FermaMolecola()
     {
-        foreach (var atomo in OttieniMolecola())
-        {
-            atomo.AzzeraVelocita();
-        }
+        foreach (var atomo in OttieniMolecola()) atomo.AzzeraVelocita();
     }
  
     private void AzzeraVelocita()
@@ -240,10 +260,7 @@ public class Atomo : MonoBehaviour
     /// </summary>
     private bool GruppoInMano()
     {
-        foreach (var atomo in OttieniMolecola())
-        {
-            if (atomo.inMano) return true;
-        }
+        foreach (var atomo in OttieniMolecola()) if (atomo.inMano) return true;
         return false;
     }
  
@@ -273,7 +290,9 @@ public class Atomo : MonoBehaviour
     {
         if (altro == null || altro == this) return false;
         if (SonoGiaLegati(altro)) return false;
-        if (LegamiDisponibili <= 0 || altro.LegamiDisponibili <= 0) return false;
+        
+        // Verifica in base alle valenze libere rimanenti
+        if (ValenzeLibere <= 0 || altro.ValenzeLibere <= 0) return false;
         if (OttieniMolecola().Contains(altro)) return false;
 
         CreaLegame(altro);
@@ -282,19 +301,13 @@ public class Atomo : MonoBehaviour
 
     private bool SonoGiaLegati(Atomo altro)
     {
-        foreach (var l in legamiAttivi)
-        {
-            if (l.altroAtomo == altro) return true;
-        }
+        foreach (var l in legamiAttivi) if (l.altroAtomo == altro) return true;
         return false;
     }
 
     private bool SlotOccupato(int indice)
     {
-        foreach (var l in legamiAttivi)
-        {
-            if (l.indiceSlot == indice) return true;
-        }
+        foreach (var l in legamiAttivi) if (l.indiceSlot == indice) return true;
         return false;
     }
 
@@ -311,7 +324,6 @@ public class Atomo : MonoBehaviour
         for (int i = 0; i < direzioni.Length; i++)
         {
             if (SlotOccupato(i)) continue;
- 
             float allineamento = Vector3.Dot(transform.TransformDirection(direzioni[i]), direzioneMondo);
             if (allineamento > miglioreAllineamento)
             {
@@ -319,30 +331,32 @@ public class Atomo : MonoBehaviour
                 migliore = i;
             }
         }
- 
         return migliore;
     }
 
     private bool CreaLegame(Atomo altro)
     {
-        // Chi fa da "ancora" resta fermo, l'altro (con tutta la sua molecola)
-        // viene spostato. Se una delle due molecole e' in mano all'utente,
-        // resta ferma quella: cosi' non spostiamo cio' che si sta afferrando.
         Atomo ancora = this;
         Atomo mobile = altro;
-        // Se questo atomo non è in mano scambio i ruoli, cosi' l'altro atomo (in mano) resta fermo.
         if (altro.GruppoInMano() && !GruppoInMano())
         {
             ancora = altro;
             mobile = this;
         }
- 
+
+        int ordineRichiesto = GestoreOrdineLegame.Instance?.OrdineRichiesto ?? 1;
+        // Determina l'ordine effettivo
+        int ordineEffettivo = Mathf.Min(ordineRichiesto, ancora.ValenzeLibere, mobile.ValenzeLibere);
+        Debug.Log($"{ancora.simbolo} + {mobile.simbolo}: Legame di ordine {ordineEffettivo} (richiesto {ordineRichiesto})");
+
         Vector3 versoMobile = mobile.transform.position - ancora.transform.position;
         if (versoMobile.sqrMagnitude < 1e-8f) versoMobile = Vector3.forward;
         versoMobile.Normalize();
  
         int slotAncora = ancora.SlotLiberoPiuVicino(versoMobile);
         int slotMobile = mobile.SlotLiberoPiuVicino(-versoMobile);
+        
+        // Se non ci sono slot fisici liberi (nonostante le valenze), fallback a non legare
         if (slotAncora < 0 || slotMobile < 0) return false;
  
         if (allineaAllaConnessione)
@@ -366,17 +380,22 @@ public class Atomo : MonoBehaviour
             cilindro = Instantiate(prefabCilindroLegame);
             LegameVisuale visuale = cilindro.GetComponent<LegameVisuale>();
             if (visuale == null) visuale = cilindro.AddComponent<LegameVisuale>();
-            visuale.Imposta(transform, altro.transform);
+            visuale.Imposta(transform, altro.transform, ordineEffettivo);
         }
  
-        legamiAttivi.Add(new Legame
-        {
+        legamiAttivi.Add(new Legame {
             altroAtomo = altro,
             cilindroVisivo = cilindro,
             joint = joint,
-            indiceSlot = slotQuesto
+            indiceSlot = slotQuesto,
+            ordine = ordineEffettivo
         });
-        altro.RegistraLegameRicevuto(this, cilindro, slotAltro);
+        
+        altro.RegistraLegameRicevuto(this, cilindro, slotAltro, ordineEffettivo);
+
+        // Reset ordine dei legami
+        GestoreOrdineLegame.Instance?.ResetOrdine();
+
         return true;
     }
 
@@ -414,14 +433,14 @@ public class Atomo : MonoBehaviour
     /// Chiamato dall'atomo che ha creato il FixedJoint, cosi' anche questo
     /// atomo registra il legame (e lo slot occupato) senza un joint duplicato.
     /// </summary>
-    internal void RegistraLegameRicevuto(Atomo altro, GameObject cilindro, int indiceSlot)
+    internal void RegistraLegameRicevuto(Atomo altro, GameObject cilindro, int indiceSlot, int ordine)
     {
-        legamiAttivi.Add(new Legame
-        {
+        legamiAttivi.Add(new Legame {
             altroAtomo = altro,
             cilindroVisivo = cilindro,
             joint = null,
-            indiceSlot = indiceSlot
+            indiceSlot = indiceSlot,
+            ordine = ordine
         });
     }
 
@@ -447,14 +466,12 @@ public class Atomo : MonoBehaviour
                 }
             }
         }
-
         return visitati;
     }
 
-    // ------------------------------------------------------------------
-    // Debug visivo: slot liberi (verde) e occupati (rosso) nella Scene view
-    // ------------------------------------------------------------------
- 
+    /// <summary>
+    /// Disegna i gizmos selezionati per visualizzare le direzioni degli slot.
+    /// </summary>
     private void OnDrawGizmosSelected()
     {
         Vector3[] direzioni = DirezioniPerSterico(NumeroSterico);

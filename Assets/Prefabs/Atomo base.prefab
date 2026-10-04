@@ -244,12 +244,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a76653298abc5648a8c00afa27d9b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Atomo
-  nomeElemento: Idrogeno
-  simbolo: H
-  elettroniValenza: 1
+  nomeElemento: 
+  simbolo: 
+  elettroniValenza: 8
+  legamiMassimiManuali: -1
   prefabCilindroLegame: {fileID: 1894789118338399641, guid: 911c98c85e31e0440937e11fe8556a47, type: 3}
   distanzaLegame: 0.15
   allineaAllaConnessione: 1
+  avanzaOrdineAzione: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  ordineLegameRichiesto: 1
   legamiAttivi: []
 --- !u!135 &2071977142388152127
 SphereCollider:

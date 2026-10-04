@@ -76,6 +76,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ossigeno Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 7759574583222726981, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3f3add22f36a1d44d84ffd0d7b74043e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 4471829408277763334, guid: 070279631c0a17f41bd0426620187844, type: 3}
