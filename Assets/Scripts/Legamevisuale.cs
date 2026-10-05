@@ -47,6 +47,14 @@ public class LegameVisuale : MonoBehaviour
         }
     }
 
+    public void ImpostaGenitore(Transform genitore)
+    {
+        foreach (var cil in cilindriVisivi)
+        {
+            cil.SetParent(genitore, true);
+        }
+    }
+
     private void LateUpdate()
     {
         if (atomoA == null || atomoB == null)

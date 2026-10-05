@@ -334,6 +334,51 @@ public class Atomo : MonoBehaviour
         return migliore;
     }
 
+    private static Transform TrovaContenitore(Transform t)
+    {
+        Transform p = t.parent;
+        return (p != null && p.GetComponent<ContenitoreMolecola>() != null) ? p : null;
+    }
+
+    private static Transform AggiornaContenitoreMolecola(Atomo a, Atomo b)
+    {
+        Transform contenitoreA = TrovaContenitore(a.transform);
+        Transform contenitoreB = TrovaContenitore(b.transform);
+
+        if (contenitoreA == null && contenitoreB == null)
+        {
+            GameObject nuovo = new GameObject($"Molecola {a.simbolo}-{b.simbolo}");
+            nuovo.AddComponent<ContenitoreMolecola>();
+            contenitoreA = nuovo.transform;
+            a.transform.SetParent(contenitoreA, true);
+            b.transform.SetParent(contenitoreA, true);
+        }
+        else if (contenitoreA != null && contenitoreB == null)
+        {
+            contenitoreA.name += $"-{b.simbolo}";
+            b.transform.SetParent(contenitoreA, true);
+        }
+        else if (contenitoreA == null && contenitoreB != null)
+        {
+            contenitoreB.name += $"-{a.simbolo}";
+            a.transform.SetParent(contenitoreB, true);
+            contenitoreA = contenitoreB;
+        }
+        else if (contenitoreA != contenitoreB)
+        {
+            // Due molecole gia' esistenti si uniscono: svuotiamo il secondo
+            // contenitore nel primo e distruggiamo quello rimasto vuoto.
+            for (int i = contenitoreB.childCount - 1; i >= 0; i--)
+            {
+                contenitoreA.name += $"-{contenitoreB.GetChild(i).GetComponent<Atomo>().simbolo}";
+                contenitoreB.GetChild(i).SetParent(contenitoreA, true);   
+            }
+            Destroy(contenitoreB.gameObject);
+        }
+
+        return contenitoreA;
+    }
+
     private bool CreaLegame(Atomo altro)
     {
         Atomo ancora = this;
@@ -375,12 +420,15 @@ public class Atomo : MonoBehaviour
         joint.breakTorque = Mathf.Infinity;
  
         GameObject cilindro = null;
+        Transform contenitore = AggiornaContenitoreMolecola(this, altro);
+
         if (prefabCilindroLegame != null)
         {
             cilindro = Instantiate(prefabCilindroLegame);
             LegameVisuale visuale = cilindro.GetComponent<LegameVisuale>();
             if (visuale == null) visuale = cilindro.AddComponent<LegameVisuale>();
             visuale.Imposta(transform, altro.transform, ordineEffettivo);
+            visuale.ImpostaGenitore(contenitore);
         }
  
         legamiAttivi.Add(new Legame {
