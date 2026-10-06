@@ -6235,7 +6235,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5378150357225492649}
-  - component: {fileID: 2304312197953965931}
   - component: {fileID: 8175125122583915835}
   - component: {fileID: 8175125122583915836}
   - component: {fileID: 8175125122583915837}
@@ -6605,30 +6604,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   borderRadius: {x: 12, y: 12, z: 12, w: 12}
---- !u!114 &2304312197953965931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 930338843605138423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d02efd1dd7ee874294db5cedd098de1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _toggleGroup: {fileID: 0}
-  _headerToggle: {fileID: 5129598469622911274}
-  _toggles: []
-  WhenSelectionChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  _title: {fileID: 4207457078610773312}
-  _titleName: Title
-  _subtitle: {fileID: 7389476776400477545}
-  _subtitleName: Subtitle
-  _icon: {fileID: 3209718874074839474}
-  _iconName: Icon
 --- !u!114 &2474591115496156029
 MonoBehaviour:
   m_ObjectHideFlags: 0
