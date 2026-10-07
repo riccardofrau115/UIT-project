@@ -1,0 +1,28 @@
+{
+  "Particles": [
+    {
+      "id": "N",
+      "name": "Azoto",
+      "icon": "Icons/Azoto",
+      "prefab": "Particles/Azoto"
+    },
+    {
+      "id": "H",
+      "name": "Idrogeno",
+      "icon": "Icons/Idrogeno",
+      "prefab": "Particles/Idrogeno"
+    },
+    {
+      "id": "C",
+      "name": "Carbonio",
+      "icon": "Icons/Carbonio",
+      "prefab": "Particles/Carbonio"
+    },
+    {
+      "id": "O",
+      "name": "Ossigeno",
+      "icon": "Icons/Ossigeno",
+      "prefab": "Particles/Ossigeno"
+    }
+  ]
+}

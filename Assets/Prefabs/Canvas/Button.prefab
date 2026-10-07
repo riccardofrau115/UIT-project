@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 9090133101894181565}
   - component: {fileID: 6066600463761210882}
   - component: {fileID: 1100660593492092517}
+  - component: {fileID: 8688299507501375986}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -152,8 +153,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 24
     m_Right: 24
-    m_Top: 4
-    m_Bottom: 4
+    m_Top: 8
+    m_Bottom: 8
   m_ChildAlignment: 4
   m_Spacing: 12
   m_ChildForceExpandWidth: 0
@@ -191,6 +192,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParticleSpawner
   prefab: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
   spawnPoint: {fileID: 0}
+--- !u!114 &8688299507501375986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2996095225390305117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7040f4298abcca43903cf74b0a57237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementView
+  icon: {fileID: 5535824855912460564}
+  label: {fileID: 2451946768816355782}
+  spawner: {fileID: 1100660593492092517}
 --- !u!1 &4474827608659223855
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +338,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 66, y: -32.41}
+  m_AnchoredPosition: {x: 66, y: -36.41}
   m_SizeDelta: {x: 140.38, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &2960624195811027501

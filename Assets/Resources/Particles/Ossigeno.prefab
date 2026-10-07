@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4156039431791972029
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1684846937713447339, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: instanceId
+      value: 8a06b465-9348-4244-b82e-d5c04a9a915d
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.22827
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.794
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857297718055400796, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272311405986090748, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: simbolo
+      value: O
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272311405986090748, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: nomeElemento
+      value: Ossigeno
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272311405986090748, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: elettroniValenza
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272311405986090748, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: prefabCilindroLegame
+      value: 
+      objectReference: {fileID: 1894789118338399641, guid: 911c98c85e31e0440937e11fe8556a47, type: 3}
+    - target: {fileID: 4996623607764187513, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: instanceId
+      value: 166cfb65-f743-49be-9df2-4ef0d3863050
+      objectReference: {fileID: 0}
+    - target: {fileID: 7417624535191760300, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: m_Name
+      value: Ossigeno Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7759574583222726981, guid: 070279631c0a17f41bd0426620187844, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3f3add22f36a1d44d84ffd0d7b74043e, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 4471829408277763334, guid: 070279631c0a17f41bd0426620187844, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 070279631c0a17f41bd0426620187844, type: 3}
