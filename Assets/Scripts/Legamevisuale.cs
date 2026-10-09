@@ -12,11 +12,14 @@ public class LegameVisuale : MonoBehaviour
     
     [Tooltip("Distanza di sfalsamento per i legami doppi/tripli")]
     public float distanzaSfalsamento = 0.04f;
-
+    
+    [SerializeField]
     private Transform atomoA;
+    [SerializeField]
     private Transform atomoB;
+    [SerializeField]
     private int ordineLegame = 1;
-
+    [SerializeField]
     private List<Transform> cilindriVisivi = new List<Transform>();
 
     public void Imposta(Transform a, Transform b, int ordine)
@@ -40,7 +43,7 @@ public class LegameVisuale : MonoBehaviour
             MeshRenderer rendererGenitore = GetComponent<MeshRenderer>();
             if (rendererGenitore != null)
             {
-                cilindroExtra.GetComponent<MeshRenderer>().material = rendererGenitore.material;
+                cilindroExtra.GetComponent<MeshRenderer>().sharedMaterial = rendererGenitore.sharedMaterial;
             }
 
             cilindriVisivi.Add(cilindroExtra.transform);
