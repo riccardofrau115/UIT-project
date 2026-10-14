@@ -207,6 +207,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ossigeno (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6871795808340648721, guid: 8682492c2549186418ea3aeb309a2210, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9005692259255416772, guid: 8682492c2549186418ea3aeb309a2210, type: 3}
       propertyPath: instanceId
       value: 92387b40-acf4-4be5-9d58-a27f72144f5c
@@ -546,6 +550,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ossigeno (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6871795808340648721, guid: 8682492c2549186418ea3aeb309a2210, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9005692259255416772, guid: 8682492c2549186418ea3aeb309a2210, type: 3}
       propertyPath: instanceId
       value: 91df468f-7b09-4547-84e7-6fc206949ee0
@@ -694,6 +702,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Idrogeno (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1516417113165667779, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3939600537353111830, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
       propertyPath: instanceId
       value: 0e93ee6d-0122-46d9-825e-330b8d346415
@@ -758,6 +770,10 @@ PrefabInstance:
     - target: {fileID: 1516417113165667779, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
       propertyPath: m_Name
       value: Idrogeno (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1516417113165667779, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3939600537353111830, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
       propertyPath: instanceId
@@ -1045,6 +1061,10 @@ PrefabInstance:
     - target: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
       propertyPath: m_Name
       value: Azoto (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1346,6 +1366,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ossigeno (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6871795808340648721, guid: 8682492c2549186418ea3aeb309a2210, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9005692259255416772, guid: 8682492c2549186418ea3aeb309a2210, type: 3}
       propertyPath: instanceId
       value: 341ac30b-d430-48e3-a068-f7f809d111f8
@@ -1494,6 +1518,10 @@ PrefabInstance:
     - target: {fileID: 3470429815190722495, guid: 37166b2a4ec2eb24fa1e201057f511b7, type: 3}
       propertyPath: m_Name
       value: Carbonio
+      objectReference: {fileID: 0}
+    - target: {fileID: 3470429815190722495, guid: 37166b2a4ec2eb24fa1e201057f511b7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5701471222191640399, guid: 37166b2a4ec2eb24fa1e201057f511b7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1663,6 +1691,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Azoto (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1758,6 +1790,10 @@ PrefabInstance:
     - target: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
       propertyPath: m_Name
       value: Azoto (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1941,6 +1977,10 @@ PrefabInstance:
     - target: {fileID: 6871795808340648721, guid: 8682492c2549186418ea3aeb309a2210, type: 3}
       propertyPath: m_Name
       value: Ossigeno
+      objectReference: {fileID: 0}
+    - target: {fileID: 6871795808340648721, guid: 8682492c2549186418ea3aeb309a2210, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2791,6 +2831,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Azoto (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3483,6 +3527,120 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1502705854}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1559952043
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1559952047}
+  - component: {fileID: 1559952046}
+  - component: {fileID: 1559952044}
+  - component: {fileID: 1559952045}
+  m_Layer: 0
+  m_Name: Pedana cestino
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1559952044
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559952043}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 799a1b9ad9b5b9e42b6a235568ee1c2e, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &1559952045
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559952043}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5000001
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!33 &1559952046
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559952043}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1559952047
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559952043}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.9892, z: 0}
+  m_LocalScale: {x: 1, y: 0.010044396, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1863583009}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1579049100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3542,6 +3700,10 @@ PrefabInstance:
     - target: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
       propertyPath: m_Name
       value: Azoto (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3821,6 +3983,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Azoto
       objectReference: {fileID: 0}
+    - target: {fileID: 8591267813269491521, guid: 68ef636b5978a4f49b013acdd6b32b70, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4025,6 +4191,138 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1502705854}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1863583004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1863583009}
+  - component: {fileID: 1863583008}
+  - component: {fileID: 1863583007}
+  - component: {fileID: 1863583006}
+  - component: {fileID: 1863583005}
+  m_Layer: 0
+  m_Name: Zona Cestino
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1863583005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863583004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caa6fcedcaa50dc4b84d8e2bc4b6f016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZonaCestino
+  volumeVisivo: {fileID: 1559952044}
+  materialeNormale: {fileID: 2100000, guid: 799a1b9ad9b5b9e42b6a235568ee1c2e, type: 2}
+  materialeAttivo: {fileID: 2100000, guid: 5eb29220586cac14da2e6a04b89c4189, type: 2}
+  etichetta: {fileID: 0}
+--- !u!136 &1863583006
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863583004}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5000001
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!23 &1863583007
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863583004}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 70eba8925cbeb094a82c7607ea1deed0, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1863583008
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863583004}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1863583009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863583004}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.07, y: 4.98, z: 3.31}
+  m_LocalScale: {x: 1, y: 4.9779, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1559952047}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1892296223
 GameObject:
   m_ObjectHideFlags: 0
@@ -4100,6 +4398,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Idrogeno (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1516417113165667779, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3939600537353111830, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
       propertyPath: instanceId
       value: d10420de-7beb-4872-bfbc-440e731b53e0
@@ -4164,6 +4466,10 @@ PrefabInstance:
     - target: {fileID: 1516417113165667779, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
       propertyPath: m_Name
       value: Idrogeno
+      objectReference: {fileID: 0}
+    - target: {fileID: 1516417113165667779, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7655456418162951475, guid: 201361262c262a548997ce26c6b2bd89, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4252,6 +4558,10 @@ PrefabInstance:
     - target: {fileID: 513366511213706879, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
       propertyPath: m_Name
       value: Molecola CH4
+      objectReference: {fileID: 0}
+    - target: {fileID: 513366511213706879, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6847950387276394822, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4367,6 +4677,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Molecola O2
       objectReference: {fileID: 0}
+    - target: {fileID: 24321078783444641, guid: 48ea977b97fe2bf4cbf11809f34d223a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1599887360737117848, guid: 48ea977b97fe2bf4cbf11809f34d223a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.532
@@ -4464,6 +4778,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Molecola H2O
       objectReference: {fileID: 0}
+    - target: {fileID: 8744754794039159520, guid: dbd07871296ab534b831300416b59fbf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4521,6 +4839,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Molecola N2
       objectReference: {fileID: 0}
+    - target: {fileID: 7492229117656287014, guid: 9c2e7abcf4ef8984ca16b812826f794f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4555,3 +4877,4 @@ SceneRoots:
   - {fileID: 6463657075466882229}
   - {fileID: 4820887756680343227}
   - {fileID: 686923778983385093}
+  - {fileID: 1863583009}

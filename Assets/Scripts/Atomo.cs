@@ -75,6 +75,9 @@ public class Atomo : MonoBehaviour
     [SerializeField]
     private List<Legame> legamiAttivi = new List<Legame>();
 
+    // AGGIUNGI QUESTA RIGA: Evento globale per notificare il rilascio di un atomo
+    public static event System.Action<Atomo> AtomoRilasciato;
+
     private Rigidbody rb;
     private Grabbable grabbable;
     private bool inMano;
@@ -216,13 +219,16 @@ public class Atomo : MonoBehaviour
             inMano = false;
             //ResetOrdine(); // Reset a singolo quando si rilascia l'atomo
             
-            if (fermaAlRilascio && evento.Type == PointerEventType.Unselect)
+            if (evento.Type == PointerEventType.Unselect)
             {
-                // Azzeriamo per qualche step fisico: un eventuale lancio
-                // dell'SDK o il joint residuo verso il proxy di grab
-                // potrebbero ridare velocita' subito dopo l'Unselect.
-                StopCoroutine(nameof(FermaMolecolaPerAlcuniFrame));
-                StartCoroutine(nameof(FermaMolecolaPerAlcuniFrame));
+                // AGGIUNGI QUESTA RIGA per avvisare la ZonaCestino
+                AtomoRilasciato?.Invoke(this);
+
+                if (fermaAlRilascio)
+                {
+                    StopCoroutine(nameof(FermaMolecolaPerAlcuniFrame));
+                    StartCoroutine(nameof(FermaMolecolaPerAlcuniFrame));
+                }
             }
         }
     }
@@ -517,6 +523,26 @@ public class Atomo : MonoBehaviour
         return visitati;
     }
 
+    /// <summary>
+    /// Distrugge questo atomo e tutti quelli ad esso legati.
+    /// I cilindri visivi si autodistruggeranno in automatico.
+    /// </summary>
+    public void DistruggiMolecola()
+    {
+        List<Atomo> tuttiGliAtomi = OttieniMolecola();
+        ContenitoreMolecola contenitore = TrovaContenitore(transform)?.GetComponent<ContenitoreMolecola>();
+        foreach (var atomo in tuttiGliAtomi)
+        {
+            if (atomo != null)
+            {
+                Destroy(atomo.gameObject);
+            }
+        }
+        if (contenitore != null)
+        {
+            contenitore.DistruggiMolecola();
+        }
+    }
     /// <summary>
     /// Disegna i gizmos selezionati per visualizzare le direzioni degli slot.
     /// </summary>
