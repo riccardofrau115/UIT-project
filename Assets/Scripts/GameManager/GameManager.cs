@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,27 +10,36 @@ public class GameManager : MonoBehaviour
     [Header("Stato Attuale")]
     [SerializeField] private GameState startState = GameState.Start;
     [SerializeField] private GameState currentState;
+    [SerializeField] private MissionPhase missionPhase; // valida solo in GameState.Mission
     public GameState CurrentState => currentState;
+    public MissionPhase CurrentPhase => missionPhase;
 
     [Header("Riferimenti Moduli (menu con CanvasGroupFader)")]
     [SerializeField] private CanvasGroupFader startUI;
     [SerializeField] private CanvasGroupFader calibrationUI;
     [SerializeField] private CanvasGroupFader modeSelectUI;
-    [SerializeField] private CanvasGroupFader sandboxUI;
-    [SerializeField] private CanvasGroupFader missionCompleteUI;
-    [SerializeField] private Transform tableAnchor; // Ancoraggio sul tavolo calibrato
+    [SerializeField] private CanvasGroupFader periodicTableUI;
+    [SerializeField] private CanvasGroupFader objectiveUI;       // obiettivi/istruzioni della missione
+    [SerializeField] private CanvasGroupFader missionCompleteUI; // vittoria / riprova / avanti
+    [SerializeField] private Transform tableAnchor;              // Ancoraggio sul tavolo calibrato
 
     [Header("Eventi")]
     public UnityEvent<GameState> OnStateChanged;
+    public UnityEvent<MissionPhase> OnMissionPhaseChanged;
+
+    [Header("Missione")]
+    [SerializeField] private float rewardDuration = 2f;
+
+    private CanvasGroupFader[] allUI;
 
     // true dopo la prima transizione: evita che l'early return di Transition()
     // blocchi l'avvio quando startState coincide con il valore di default dell'enum
     private bool hasState;
 
-    // Transizioni richieste mentre ne è in corso un'altra (es. da EnterState):
-    // vengono eseguite in coda, così OnStateChanged scatta nell'ordine corretto
-    private bool isTransitioning;
-    private readonly Queue<GameState> pendingStates = new Queue<GameState>();
+    // Cambi di stato/fase richiesti mentre ne è in corso un altro (es. da EnterState):
+    // vengono eseguiti in coda, nell'ordine di richiesta, così gli eventi scattano nell'ordine corretto
+    private bool isProcessing;
+    private readonly Queue<System.Action> pending = new Queue<System.Action>();
 
     private void Awake()
     {
@@ -39,6 +49,8 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        allUI = new[] { startUI, calibrationUI, modeSelectUI, periodicTableUI, objectiveUI, missionCompleteUI };
     }
 
     private void OnDestroy()
@@ -49,29 +61,32 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Parte da tutti i menu nascosti, indipendentemente da come sono in scena
-        HideAllUI();
+        foreach (var ui in allUI) SetUI(ui, false, true);
         ChangeState(startState);
     }
 
-    public void ChangeState(GameState newState)
-    {
-        if (isTransitioning)
-        {
-            pendingStates.Enqueue(newState);
-            return;
-        }
+    #region Coda transizioni
 
-        isTransitioning = true;
+    public void ChangeState(GameState newState) => Enqueue(() => Transition(newState));
+
+    // Valido solo mentre si è in GameState.Mission (controllato al momento dell'esecuzione)
+    public void ChangeMissionPhase(MissionPhase newPhase) => Enqueue(() => PhaseTransition(newPhase));
+
+    private void Enqueue(System.Action transition)
+    {
+        pending.Enqueue(transition);
+        if (isProcessing) return;
+
+        isProcessing = true;
         try
         {
-            Transition(newState);
-            while (pendingStates.Count > 0)
-                Transition(pendingStates.Dequeue());
+            while (pending.Count > 0)
+                pending.Dequeue().Invoke();
         }
         finally
         {
-            isTransitioning = false;
-            pendingStates.Clear();
+            isProcessing = false;
+            pending.Clear();
         }
     }
 
@@ -82,11 +97,34 @@ public class GameManager : MonoBehaviour
         if (hasState) ExitState(currentState);
         currentState = newState;
         hasState = true;
+
+        // Si entra sempre in Mission dalla fase Setup (evita UI residua della missione precedente)
+        if (newState == GameState.Mission) missionPhase = MissionPhase.Setup;
+
+        RefreshUI();
         EnterState(newState);
 
         OnStateChanged?.Invoke(newState);
         Debug.Log($"[GameManager] Nuovo Stato: {newState}");
     }
+
+    private void PhaseTransition(MissionPhase newPhase)
+    {
+        if (currentState != GameState.Mission || missionPhase == newPhase) return;
+
+        ExitMissionPhase(missionPhase);
+        missionPhase = newPhase;
+
+        RefreshUI();
+        EnterMissionPhase(newPhase);
+
+        OnMissionPhaseChanged?.Invoke(newPhase);
+        Debug.Log($"[GameManager] Nuova Fase Missione: {newPhase}");
+    }
+
+    #endregion
+
+    #region Gestione UI
 
     // Unico punto in cui si mostra/nasconde un menu: usa CanvasGroupFader, non SetActive
     private static void SetUI(CanvasGroupFader ui, bool visible, bool instant = false)
@@ -94,92 +132,150 @@ public class GameManager : MonoBehaviour
         if (ui) ui.SetVisible(visible, instant);
     }
 
-    private void HideAllUI()
+    // Applica a tutti i menu la visibilità dello stato/fase corrente.
+    // I menu condivisi (tavola periodica) restano visibili tra Sandbox e Mission senza essere nascosti e riaccesi.
+    private void RefreshUI()
     {
-        SetUI(startUI, false, true);
-        SetUI(calibrationUI, false, true);
-        SetUI(modeSelectUI, false, true);
-        SetUI(sandboxUI, false, true);
-        SetUI(missionCompleteUI, false, true);
+        foreach (var ui in allUI)
+            SetUI(ui, IsVisible(ui));
     }
 
-    #region Gestione Ingressi negli Stati
+    // Mappa stato/fase -> menu visibili
+    private bool IsVisible(CanvasGroupFader ui)
+    {
+        switch (currentState)
+        {
+            case GameState.Start:       return ui == startUI;
+            case GameState.Calibration: return ui == calibrationUI;
+            case GameState.ModeSelect:  return ui == modeSelectUI;
+            case GameState.Sandbox:     return ui == periodicTableUI;
+
+            case GameState.Mission:
+                switch (missionPhase)
+                {
+                    case MissionPhase.Setup:
+                    case MissionPhase.Assembly:
+                    case MissionPhase.Validation:
+                        return ui == periodicTableUI || ui == objectiveUI;
+                    case MissionPhase.Reward:
+                        return ui == objectiveUI;       // niente più atomi da aggiungere
+                    case MissionPhase.Complete:
+                        return ui == missionCompleteUI;
+                }
+                return false;
+        }
+        return false;
+    }
+
+    #endregion
+
+    #region Gestione Ingressi / Uscite Stati
 
     private void EnterState(GameState state)
     {
         switch (state)
         {
-            case GameState.Start:
-                SetUI(startUI, true);
-                break;
-
             case GameState.Calibration:
-                SetUI(calibrationUI, true);
                 // Avvia Meta Scene API o raycast plane detection per il tavolo
                 break;
 
-            case GameState.ModeSelect:
-                SetUI(modeSelectUI, true);
-                break;
-
             case GameState.Sandbox:
-                SetUI(sandboxUI, true);
                 // Attiva spawner libero di tutti gli atomi
                 break;
 
-            case GameState.MissionInitialize:
-                SetupCurrentMission();
-                // Messo in coda: parte dopo OnStateChanged(MissionInitialize)
-                ChangeState(GameState.AssemblyInProgress);
+            case GameState.Mission:
+                // Fase Setup già impostata da Transition(); la UI è già aggiornata
+                EnterMissionPhase(missionPhase);
+                OnMissionPhaseChanged?.Invoke(missionPhase);
                 break;
+        }
+    }
 
-            case GameState.AssemblyInProgress:
-                // Abilita interazioni sui componenti del vassoio e abilita il Podio
-                break;
-
-            case GameState.Validation:
-                CheckMoleculeSolution();
-                break;
-
-            case GameState.RewardAndFeedback:
-                PlaySuccessEffects();
-                break;
-
-            case GameState.MissionComplete:
-                SetUI(missionCompleteUI, true);
+    private void ExitState(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Mission:
+                // Uscendo dalla missione l'Invoke di fine Reward non deve scattare
+                CancelInvoke(nameof(GoToMissionComplete));
                 break;
         }
     }
 
     #endregion
 
-    #region Gestione Uscite dagli Stati
+    #region Gestione Fasi Missione
 
-    private void ExitState(GameState state)
+    private void EnterMissionPhase(MissionPhase phase)
     {
-        switch (state)
+        switch (phase)
         {
-            case GameState.Start:
-                SetUI(startUI, false);
+            case MissionPhase.Setup:
+                SetupCurrentMission();
+                // In coda: parte dopo OnMissionPhaseChanged(Setup)
+                ChangeMissionPhase(MissionPhase.Assembly);
                 break;
-            case GameState.Calibration:
-                SetUI(calibrationUI, false);
+
+            case MissionPhase.Assembly:
+                // Abilita interazioni sui componenti del vassoio e abilita il Podio
                 break;
-            case GameState.ModeSelect:
-                SetUI(modeSelectUI, false);
+
+            case MissionPhase.Validation:
+                CheckMoleculeSolution();
                 break;
-            case GameState.Sandbox:
-                SetUI(sandboxUI, false);
+
+            case MissionPhase.Reward:
+                PlaySuccessEffects();
                 break;
-            case GameState.RewardAndFeedback:
-                // Se si esce prima dei 2 secondi, l'Invoke non deve scattare
-                CancelInvoke(nameof(GoToMissionComplete));
-                break;
-            case GameState.MissionComplete:
-                SetUI(missionCompleteUI, false);
+
+            case MissionPhase.Complete:
+                // UI di completamento mostrata da RefreshUI()
                 break;
         }
     }
+
+    private void ExitMissionPhase(MissionPhase phase)
+    {
+        switch (phase)
+        {
+            case MissionPhase.Reward:
+                // Se si esce prima del delay, l'Invoke non deve scattare
+                CancelInvoke(nameof(GoToMissionComplete));
+                break;
+        }
+    }
+
+    private void SetupCurrentMission()
+    {
+        // Istanzia ricetta, attiva il vassoio atomi necessario, posiziona il ghost
+        // e aggiorna il testo dell'objectiveUI (es. "Crea la molecola dell'acqua")
+    }
+
+    private void CheckMoleculeSolution()
+    {
+        // TODO: Inserire qui il controllo di formula / connettività nodi
+        bool isFormulaCorrect = true; // Sostituire con validazione reale
+
+        if (isFormulaCorrect)
+        {
+            ChangeMissionPhase(MissionPhase.Reward);
+        }
+        else
+        {
+            // Formula errata: feedback e ritorno all'assemblaggio per riprovare
+            Debug.Log("[GameManager] Formula non corretta!");
+            // TODO: feedback sonoro/visivo
+            ChangeMissionPhase(MissionPhase.Assembly);
+        }
+    }
+
+    private void PlaySuccessEffects()
+    {
+        // TODO: Attiva Audio, Particellari, Sblocco Codex
+        Invoke(nameof(GoToMissionComplete), rewardDuration);
+    }
+
+    private void GoToMissionComplete() => ChangeMissionPhase(MissionPhase.Complete);
 
     #endregion
 
@@ -198,67 +294,31 @@ public class GameManager : MonoBehaviour
 
     // Chiamato dai pulsanti della UI ModeSelect
     public void SelectSandboxMode() => ChangeState(GameState.Sandbox);
-    public void SelectCampaignMode() => ChangeState(GameState.MissionInitialize);
+    public void SelectCampaignMode() => ChangeState(GameState.Mission);
 
     // Chiamato dal Podio quando l'utente adagia la molecola per la verifica
     public void OnMoleculeSubmitted(GameObject submittedMolecule)
     {
-        if (currentState != GameState.AssemblyInProgress) return;
-        ChangeState(GameState.Validation);
-    }
-
-    private void CheckMoleculeSolution()
-    {
-        // TODO: Inserire qui il controllo di formula / connettività nodi
-        bool isFormulaCorrect = true; // Sostituire con validazione reale
-
-        if (isFormulaCorrect)
-        {
-            ChangeState(GameState.RewardAndFeedback);
-        }
-        else
-        {
-            // Formula errata: feedback e ritorno all'assemblaggio per riprovare
-            Debug.Log("[GameManager] Formula non corretta!");
-            // TODO: feedback sonoro/visivo
-            ChangeState(GameState.AssemblyInProgress);
-        }
-    }
-
-    private void PlaySuccessEffects()
-    {
-        // TODO: Attiva Audio, Particellari, Sblocco Codex
-        // Dopo un piccolo delay (es. 2 secondi), mostra la UI di completamento
-        Invoke(nameof(GoToMissionComplete), 2.0f);
-    }
-
-    private void GoToMissionComplete()
-    {
-        if (currentState != GameState.RewardAndFeedback) return;
-        ChangeState(GameState.MissionComplete);
+        if (currentState != GameState.Mission || missionPhase != MissionPhase.Assembly) return;
+        ChangeMissionPhase(MissionPhase.Validation);
     }
 
     // Chiamato dai pulsanti in MissionComplete UI
     public void NextLevel()
     {
         // Incrementa indice livello
-        ChangeState(GameState.MissionInitialize);
+        ChangeMissionPhase(MissionPhase.Setup);
     }
 
     public void RetryLevel()
     {
-        ChangeState(GameState.MissionInitialize);
+        ChangeMissionPhase(MissionPhase.Setup);
     }
 
-    // Chiamato anche dalla UI Sandbox (unica uscita da quello stato)
+    // Uscita da Sandbox o Mission verso la scelta modalità
     public void BackToMenu()
     {
         ChangeState(GameState.ModeSelect);
-    }
-
-    private void SetupCurrentMission()
-    {
-        // Istanzia ricetta, attiva il vassoio atomi necessario e posiziona il ghost
     }
 
     #endregion

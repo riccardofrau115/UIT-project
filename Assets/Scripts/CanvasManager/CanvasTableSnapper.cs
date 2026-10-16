@@ -14,7 +14,6 @@ public class CanvasTableSnapper : MonoBehaviour
 
     [Header("Opzioni Rotazione")]
     [Tooltip("Se true, la cima del testo punta lontano dall'utente (testo leggibile da chi sta al tavolo).")]
-    [SerializeField] private bool faceUserOnTable = true;
 
     private Grabbable _grabbable;
     private void Awake()
@@ -34,9 +33,6 @@ public class CanvasTableSnapper : MonoBehaviour
 
     private void HandlePointerEvent(PointerEvent evt)
     {
-        if (GameManager.Instance != null && GameManager.Instance.CurrentState != GameState.Calibration)
-            return;
-
         if (evt.Type == PointerEventType.Unselect)
         {
             TrySnapToTable();
@@ -62,28 +58,23 @@ public class CanvasTableSnapper : MonoBehaviour
 
         Vector3 surfaceUp = hit.normal; // es. (0,1,0)
 
-     
+
         Transform head = userHead != null ? userHead : (Camera.main != null ? Camera.main.transform : null);
         Vector3 awayFromUser;
 
-        if (faceUserOnTable && head != null)
-        {
-            awayFromUser = -Vector3.ProjectOnPlane(head.position - hit.point, surfaceUp);
-        }
-        else
-        {
-            // Mantiene la direzione in cui "guardava" il canvas (lontano da chi lo teneva)
-            awayFromUser = Vector3.ProjectOnPlane(transform.forward, surfaceUp);
-        }
+
+        // Mantiene la direzione in cui "guardava" il canvas (lontano da chi lo teneva)
+        awayFromUser = Vector3.ProjectOnPlane(transform.forward, surfaceUp);
+
 
         if (awayFromUser.sqrMagnitude < 0.0001f)
             awayFromUser = Vector3.ProjectOnPlane(Vector3.forward, surfaceUp);
         awayFromUser.Normalize();
 
-      
+
         Quaternion snappedRotation = Quaternion.LookRotation(-surfaceUp, awayFromUser);
 
-       
+
         Quaternion originalRotation = transform.rotation;
         transform.rotation = snappedRotation;
 
@@ -93,7 +84,7 @@ public class CanvasTableSnapper : MonoBehaviour
 
         Vector3 snappedPosition = hit.point + surfaceUp * (halfThickness + heightOffsetFromTable);
 
-      
+
         transform.position = snappedPosition;
         transform.rotation = snappedRotation;
 
