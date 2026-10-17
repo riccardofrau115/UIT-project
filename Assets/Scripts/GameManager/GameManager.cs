@@ -19,8 +19,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CanvasGroupFader calibrationUI;
     [SerializeField] private CanvasGroupFader modeSelectUI;
     [SerializeField] private CanvasGroupFader periodicTableUI;
-    [SerializeField] private CanvasGroupFader objectiveUI;       // obiettivi/istruzioni della missione
-    [SerializeField] private CanvasGroupFader missionCompleteUI; // vittoria / riprova / avanti
+    [SerializeField] private CanvasGroupFader missionUI;       // interazione con la missione
+    [SerializeField] private CanvasGroupFader additionalInfoUI;       // interazione con la missione
+
     [SerializeField] private Transform tableAnchor;              // Ancoraggio sul tavolo calibrato
 
     [Header("Eventi")]
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
 
-        allUI = new[] { startUI, calibrationUI, modeSelectUI, periodicTableUI, objectiveUI, missionCompleteUI };
+        allUI = new[] { startUI, calibrationUI, modeSelectUI, periodicTableUI, missionUI, additionalInfoUI };
     }
 
     private void OnDestroy()
@@ -145,22 +146,21 @@ public class GameManager : MonoBehaviour
     {
         switch (currentState)
         {
-            case GameState.Start:       return ui == startUI;
+            case GameState.Start: return ui == startUI;
             case GameState.Calibration: return ui == calibrationUI;
-            case GameState.ModeSelect:  return ui == modeSelectUI;
-            case GameState.Sandbox:     return ui == periodicTableUI;
+            case GameState.ModeSelect: return ui == modeSelectUI;
+            case GameState.Sandbox: return ui == periodicTableUI;
 
             case GameState.Mission:
                 switch (missionPhase)
                 {
-                    case MissionPhase.Setup:
                     case MissionPhase.Assembly:
+                        return ui == periodicTableUI || ui == additionalInfoUI;
                     case MissionPhase.Validation:
-                        return ui == periodicTableUI || ui == objectiveUI;
+                    case MissionPhase.Setup:
                     case MissionPhase.Reward:
-                        return ui == objectiveUI;       // niente più atomi da aggiungere
                     case MissionPhase.Complete:
-                        return ui == missionCompleteUI;
+                        return ui == missionUI;
                 }
                 return false;
         }
@@ -206,14 +206,14 @@ public class GameManager : MonoBehaviour
 
     #region Gestione Fasi Missione
 
+    public void StartAssembly() => ChangeMissionPhase(MissionPhase.Assembly);
+
     private void EnterMissionPhase(MissionPhase phase)
     {
         switch (phase)
         {
             case MissionPhase.Setup:
                 SetupCurrentMission();
-                // In coda: parte dopo OnMissionPhaseChanged(Setup)
-                ChangeMissionPhase(MissionPhase.Assembly);
                 break;
 
             case MissionPhase.Assembly:
@@ -289,7 +289,8 @@ public class GameManager : MonoBehaviour
             tableAnchor.position = tablePos;
             tableAnchor.rotation = tableRot;
         }
-        ChangeState(GameState.ModeSelect);
+        if (currentState == GameState.Calibration)
+            ChangeState(GameState.ModeSelect);
     }
 
     // Chiamato dai pulsanti della UI ModeSelect
