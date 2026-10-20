@@ -12,7 +12,5 @@ public enum MissionPhase
 { 
     Setup, 
     Assembly, 
-    Validation, 
-    Reward, 
     Complete 
     }

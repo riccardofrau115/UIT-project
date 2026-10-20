@@ -31,6 +31,8 @@ using UnityEngine.InputSystem; // Necessario per InputActionReference
 ///   primo: e' la "zona di legame" usata per rilevare atomi vicini.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
+
+
 public class Atomo : MonoBehaviour
 {
     [Header("Identita' chimica")]
@@ -81,6 +83,7 @@ public class Atomo : MonoBehaviour
     private Rigidbody rb;
     private Grabbable grabbable;
     private bool inMano;
+    public static event System.Action<Atomo> OnLegameCreato;
 
     // ------------------------------------------------------------------
     // Geometria: direzioni degli slot in spazio locale
@@ -301,7 +304,8 @@ public class Atomo : MonoBehaviour
         if (ValenzeLibere <= 0 || altro.ValenzeLibere <= 0) return false;
         if (OttieniMolecola().Contains(altro)) return false;
 
-        CreaLegame(altro);
+        if (!CreaLegame(altro)) return false;
+        OnLegameCreato?.Invoke(this);
         return true;
     }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,10 +20,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CanvasGroupFader calibrationUI;
     [SerializeField] private CanvasGroupFader modeSelectUI;
     [SerializeField] private CanvasGroupFader periodicTableUI;
-    [SerializeField] private CanvasGroupFader missionUI;       // interazione con la missione
-    [SerializeField] private CanvasGroupFader additionalInfoUI;       // interazione con la missione
+    [SerializeField] private CanvasGroupFader missionStart;
+    [SerializeField] private CanvasGroupFader missionCompleted;
+    [SerializeField] private CanvasGroupFader additionalInfoUI;
 
     [SerializeField] private Transform tableAnchor;              // Ancoraggio sul tavolo calibrato
+
+
+    [Header("Livelli")]
+    [SerializeField] private LevelList levelList;
+    [SerializeField] private TMP_Text titoloMissioneText;
+    [SerializeField] private TMP_Text richiestaGenericaText;
+    [SerializeField] private TMP_Text richiestaSpecificaText;
 
     [Header("Eventi")]
     public UnityEvent<GameState> OnStateChanged;
@@ -30,6 +39,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Missione")]
     [SerializeField] private float rewardDuration = 2f;
+
+    private int levelIndex;
+    private SingleLevel CurrentLevel => levelList ? levelList.CurrentLevel : null;
 
     private CanvasGroupFader[] allUI;
 
@@ -51,7 +63,7 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
 
-        allUI = new[] { startUI, calibrationUI, modeSelectUI, periodicTableUI, missionUI, additionalInfoUI };
+        allUI = new[] { startUI, calibrationUI, modeSelectUI, periodicTableUI, missionStart, missionCompleted, additionalInfoUI };
     }
 
     private void OnDestroy()
@@ -113,7 +125,6 @@ public class GameManager : MonoBehaviour
     {
         if (currentState != GameState.Mission || missionPhase == newPhase) return;
 
-        ExitMissionPhase(missionPhase);
         missionPhase = newPhase;
 
         RefreshUI();
@@ -154,13 +165,12 @@ public class GameManager : MonoBehaviour
             case GameState.Mission:
                 switch (missionPhase)
                 {
+                    case MissionPhase.Setup:
+                        return ui == missionStart;
                     case MissionPhase.Assembly:
                         return ui == periodicTableUI || ui == additionalInfoUI;
-                    case MissionPhase.Validation:
-                    case MissionPhase.Setup:
-                    case MissionPhase.Reward:
                     case MissionPhase.Complete:
-                        return ui == missionUI;
+                        return ui == missionCompleted;
                 }
                 return false;
         }
@@ -220,13 +230,6 @@ public class GameManager : MonoBehaviour
                 // Abilita interazioni sui componenti del vassoio e abilita il Podio
                 break;
 
-            case MissionPhase.Validation:
-                CheckMoleculeSolution();
-                break;
-
-            case MissionPhase.Reward:
-                PlaySuccessEffects();
-                break;
 
             case MissionPhase.Complete:
                 // UI di completamento mostrata da RefreshUI()
@@ -234,39 +237,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ExitMissionPhase(MissionPhase phase)
+
+
+    private void OnEnable() => Atomo.OnLegameCreato += CheckMoleculeSolution;
+    private void OnDisable() => Atomo.OnLegameCreato -= CheckMoleculeSolution;
+
+
+    private void CheckMoleculeSolution(Atomo origine = null)
     {
-        switch (phase)
+        // Controlla solo durante l'assemblaggio di una missione
+        Debug.Log("[GameManager] Controllo Molecola");
+        if (currentState != GameState.Mission || missionPhase != MissionPhase.Assembly) return;
+        if (CurrentLevel == null || origine == null) return;
+        Debug.Log("Livello corrente: " + CurrentLevel.nomeMolecola + " - Origine: " + origine.nomeElemento);
+        var molecola = origine.OttieniMolecola();
+
+        if (CurrentLevel.Verifica(molecola))
         {
-            case MissionPhase.Reward:
-                // Se si esce prima del delay, l'Invoke non deve scattare
-                CancelInvoke(nameof(GoToMissionComplete));
-                break;
+            PlaySuccessEffects();
         }
-    }
-
-    private void SetupCurrentMission()
-    {
-        // Istanzia ricetta, attiva il vassoio atomi necessario, posiziona il ghost
-        // e aggiorna il testo dell'objectiveUI (es. "Crea la molecola dell'acqua")
-    }
-
-    private void CheckMoleculeSolution()
-    {
-        // TODO: Inserire qui il controllo di formula / connettività nodi
-        bool isFormulaCorrect = true; // Sostituire con validazione reale
-
-        if (isFormulaCorrect)
+        else if (molecola.TrueForAll(a => a.ValenzeLibere == 0))
         {
-            ChangeMissionPhase(MissionPhase.Reward);
-        }
-        else
-        {
-            // Formula errata: feedback e ritorno all'assemblaggio per riprovare
-            Debug.Log("[GameManager] Formula non corretta!");
+            // Molecola chiusa ma sbagliata: errore definitivo
+            Debug.Log("[GameManager] Molecola completa ma non corretta!");
             // TODO: feedback sonoro/visivo
-            ChangeMissionPhase(MissionPhase.Assembly);
         }
+        // Altrimenti è solo incompleta: nessun errore, si continua ad assemblare
     }
 
     private void PlaySuccessEffects()
@@ -293,21 +289,26 @@ public class GameManager : MonoBehaviour
             ChangeState(GameState.ModeSelect);
     }
 
-    // Chiamato dai pulsanti della UI ModeSelect
     public void SelectSandboxMode() => ChangeState(GameState.Sandbox);
-    public void SelectCampaignMode() => ChangeState(GameState.Mission);
-
-    // Chiamato dal Podio quando l'utente adagia la molecola per la verifica
-    public void OnMoleculeSubmitted(GameObject submittedMolecule)
+    public void SelectCampaignMode()
     {
-        if (currentState != GameState.Mission || missionPhase != MissionPhase.Assembly) return;
-        ChangeMissionPhase(MissionPhase.Validation);
+        levelList.Reset();
+        ChangeState(GameState.Mission);
     }
 
     // Chiamato dai pulsanti in MissionComplete UI
     public void NextLevel()
     {
-        // Incrementa indice livello
+        if (levelList.Next() == null)
+        {
+            Debug.Log("[GameManager] Nessun livello successivo: torna a scelta modalità");
+            ChangeState(GameState.ModeSelect);
+            return;
+        }
+        else
+        {
+            
+        }
         ChangeMissionPhase(MissionPhase.Setup);
     }
 
@@ -317,9 +318,33 @@ public class GameManager : MonoBehaviour
     }
 
     // Uscita da Sandbox o Mission verso la scelta modalità
-    public void BackToMenu()
+    public void GoToModeSelect()
     {
         ChangeState(GameState.ModeSelect);
+    }
+
+    public void GoToCalibration()
+    {
+        ChangeState(GameState.Calibration);
+    }
+
+    private void SetupCurrentMission()
+    {
+        PulisciScena();
+
+        var level = CurrentLevel;
+        if (level == null) { Debug.LogWarning("[GameManager] Nessun livello valido"); return; }
+
+        if (titoloMissioneText) titoloMissioneText.text = $"Livello {levelList.IndiceCorrente + 1}: {level.nomeMolecola}";
+        if (richiestaGenericaText) richiestaGenericaText.text = level.richiestaGenerica;
+        if (richiestaSpecificaText) richiestaSpecificaText.text = level.richiestaSpecifica;
+    }
+
+    // Rimuove le molecole del livello precedente (adatta a come gestisci gli atomi sciolti)
+    private void PulisciScena()
+    {
+        foreach (var c in FindObjectsByType<ContenitoreMolecola>(FindObjectsSortMode.None))
+            c.DistruggiMolecola();
     }
 
     #endregion
