@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Livello2_metano
   m_EditorClassIdentifier: Assembly-CSharp::SingleLevel
   idLivello: 2
-  nomeMolecola: Metano
+  nomeMolecola: Methane
   formula: CH4
   composizione:
   - id: C
     quantita: 1
   - id: H
     quantita: 4
-  richiestaGenerica: We need some fuel for my car! Can you make some Methane?
-  richiestaSpecifica: Create CH4
+  request: The car is out of gas, ther's need fro some METHANE
+  additionalInfo: Fuse CH4

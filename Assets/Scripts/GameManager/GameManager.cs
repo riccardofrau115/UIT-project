@@ -29,9 +29,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Livelli")]
     [SerializeField] private LevelList levelList;
-    [SerializeField] private TMP_Text titoloMissioneText;
-    [SerializeField] private TMP_Text richiestaGenericaText;
-    [SerializeField] private TMP_Text richiestaSpecificaText;
+    [SerializeField] private TMP_Text missionTitleText;
+    [SerializeField] private TMP_Text requestText;
+    [SerializeField] private TMP_Text additionalInfoText;
 
     [Header("Eventi")]
     public UnityEvent<GameState> OnStateChanged;
@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
             case GameState.Start: return ui == startUI;
             case GameState.Calibration: return ui == calibrationUI;
             case GameState.ModeSelect: return ui == modeSelectUI;
-            case GameState.Sandbox: return ui == periodicTableUI;
+            case GameState.Sandbox: return ui == periodicTableUI || ui == additionalInfoUI;
 
             case GameState.Mission:
                 switch (missionPhase)
@@ -289,7 +289,11 @@ public class GameManager : MonoBehaviour
             ChangeState(GameState.ModeSelect);
     }
 
-    public void SelectSandboxMode() => ChangeState(GameState.Sandbox);
+    public void SelectSandboxMode()
+    {
+        if (additionalInfoText) additionalInfoText.text = "Have fun!";
+        ChangeState(GameState.Sandbox);
+    }
     public void SelectCampaignMode()
     {
         levelList.Reset();
@@ -307,7 +311,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            
+
         }
         ChangeMissionPhase(MissionPhase.Setup);
     }
@@ -335,9 +339,9 @@ public class GameManager : MonoBehaviour
         var level = CurrentLevel;
         if (level == null) { Debug.LogWarning("[GameManager] Nessun livello valido"); return; }
 
-        if (titoloMissioneText) titoloMissioneText.text = $"Livello {levelList.IndiceCorrente + 1}: {level.nomeMolecola}";
-        if (richiestaGenericaText) richiestaGenericaText.text = level.richiestaGenerica;
-        if (richiestaSpecificaText) richiestaSpecificaText.text = level.richiestaSpecifica;
+        if (missionTitleText) missionTitleText.text = $"Level {levelList.IndiceCorrente + 1}: {level.nomeMolecola}";
+        if (requestText) requestText.text = level.request;
+        if (additionalInfoText) additionalInfoText.text = level.additionalInfo;
     }
 
     // Rimuove le molecole del livello precedente (adatta a come gestisci gli atomi sciolti)

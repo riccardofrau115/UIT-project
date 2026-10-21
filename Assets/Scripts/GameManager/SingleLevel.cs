@@ -21,8 +21,8 @@ public class SingleLevel : ScriptableObject
     public ElementoRichiesto[] composizione;    // es. O x1, H x2
 
     [Header("Richieste mostrate nella MissionUI")]
-    [TextArea] public string richiestaGenerica;   // es. "Crea una molecola d'acqua"
-    [TextArea] public string richiestaSpecifica;  // es. "Unisci 1 atomo di ossigeno e 2 di idrogeno"
+    [TextArea] public string request;   // es. "Crea una molecola d'acqua"
+    [TextArea] public string additionalInfo;  // es. "Unisci 1 atomo di ossigeno e 2 di idrogeno"
 
     /// <summary>True se la molecola ha esattamente gli atomi richiesti e nessuna valenza libera.</summary>
     public bool Verifica(IEnumerable<Atomo> molecola)

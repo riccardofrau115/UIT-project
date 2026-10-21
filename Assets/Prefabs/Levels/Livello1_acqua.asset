@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Livello1_acqua
   m_EditorClassIdentifier: Assembly-CSharp::SingleLevel
   idLivello: 1
-  nomeMolecola: Acqua
+  nomeMolecola: Water
   formula: H2O
   composizione:
   - id: H
     quantita: 2
   - id: O
     quantita: 1
-  richiestaGenerica: Pretty hot, isn'it? Get some Water!
-  richiestaSpecifica: Create H2O
+  request: Pretty hot isn't it? Get some WATER!
+  additionalInfo: Fuse H20
