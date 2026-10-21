@@ -1,104 +1,75 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-/// <summary>
-/// Zona "cestino": se una molecola viene rilasciata con almeno uno dei suoi
-/// atomi dentro questa zona, l'intera molecola (atomi + cilindri) viene eliminata.
-///
-/// Setup: GameObject con un Collider convesso (Box/Sphere/Capsule); il
-/// collider viene impostato automaticamente come Trigger.
-/// </summary>
-[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(CanvasGroup))]
 public class ZonaCestino : MonoBehaviour
 {
-    [Header("Feedback visivo")]
-    [Tooltip("Renderer del volume semitrasparente che indica la zona")]
-    public Renderer volumeVisivo;
-    public Material materialeNormale;
-    [Tooltip("Materiale mostrato quando un atomo si trova dentro la zona")]
-    public Material materialeAttivo;
-    [Tooltip("Testo 3D (es. TextMeshPro) che ruota per restare leggibile; opzionale")]
-    public Transform etichetta;
+    [SerializeField] private Image sfondo;
+    [SerializeField] private Color coloreAllarme = new Color(1f, 0.2f, 0.2f, 0.85f);
+    [SerializeField] private float velocitaLampeggio = 3f;
+    [SerializeField] private float velocitaDissolvenza = 8f;
+    [Tooltip("Distanza massima (m) dal piano del pannello per considerare l'atomo dentro")]
+    [SerializeField] private float profondita = 0.15f;
 
-    private Collider zona;
-    private readonly HashSet<Collider> dentro = new HashSet<Collider>();
-    private bool attivo;
+    private RectTransform rect;
+    private CanvasGroup gruppo;
+    private Color coloreBase;
+    private Atomo atomoAfferrato;
 
     private void Awake()
     {
-        zona = GetComponent<Collider>();
-        zona.isTrigger = true;
-        ApplicaMateriale(false);
+        rect = (RectTransform)transform;
+        gruppo = GetComponent<CanvasGroup>();
+        gruppo.alpha = 0f;
+        gruppo.interactable = false;
+        gruppo.blocksRaycasts = false; // e' solo visivo, non intercetta il tocco
+        if (sfondo != null) coloreBase = sfondo.color;
     }
 
-    private void OnEnable() => Atomo.AtomoRilasciato += GestisciRilascio;
-    private void OnDisable() => Atomo.AtomoRilasciato -= GestisciRilascio;
-
-    private void OnTriggerEnter(Collider other)
+    private void OnEnable()
     {
-        if (other.GetComponentInParent<Atomo>() != null) dentro.Add(other);
+        Atomo.AtomoAfferrato += OnAtomoAfferrato;
+        Atomo.AtomoRilasciato += OnAtomoRilasciato;
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnDisable()
     {
-        dentro.Remove(other);
+        Atomo.AtomoAfferrato -= OnAtomoAfferrato;
+        Atomo.AtomoRilasciato -= OnAtomoRilasciato;
+    }
+
+    private void OnAtomoAfferrato(Atomo atomo) => atomoAfferrato = atomo;
+
+    private void OnAtomoRilasciato(Atomo atomo)
+    {
+        if (atomoAfferrato == atomo) atomoAfferrato = null;
+
+        if (Dentro(atomo))
+            atomo.DistruggiMolecola();
     }
 
     private void Update()
     {
-        // Rimuove i collider distrutti o disattivati (OnTriggerExit non e'
-        // affidabile in quel caso).
-        dentro.RemoveWhere(c => c == null || !c.enabled || !c.gameObject.activeInHierarchy);
+        // Il pannello compare finche' hai un atomo in mano
+        float target = atomoAfferrato != null ? 1f : 0f;
+        gruppo.alpha = Mathf.MoveTowards(gruppo.alpha, target, velocitaDissolvenza * Time.deltaTime);
 
-        bool adesso = dentro.Count > 0;
-        if (adesso != attivo)
+        // Lampeggia in rosso quando l'atomo e' sopra il pannello
+        if (sfondo != null)
         {
-            attivo = adesso;
-            ApplicaMateriale(attivo);
-        }
-
-        // L'etichetta guarda sempre verso l'utente (solo rotazione orizzontale).
-        if (etichetta != null && Camera.main != null)
-        {
-            Vector3 dir = etichetta.position - Camera.main.transform.position;
-            dir.y = 0f;
-            if (dir.sqrMagnitude > 1e-4f) etichetta.rotation = Quaternion.LookRotation(dir);
+            sfondo.color = Dentro(atomoAfferrato)
+                ? Color.Lerp(coloreBase, coloreAllarme, Mathf.PingPong(Time.time * velocitaLampeggio, 1f))
+                : coloreBase;
         }
     }
 
-    private void ApplicaMateriale(bool evidenzia)
+    private bool Dentro(Atomo atomo)
     {
-        if (volumeVisivo == null) return;
-        Material m = evidenzia ? materialeAttivo : materialeNormale;
-        if (m != null) volumeVisivo.sharedMaterial = m;
-    }
+        if (atomo == null) return false;
 
-    private void GestisciRilascio(Atomo rilasciato)
-    {
-        if (rilasciato == null) return;
+        Vector3 p = rect.InverseTransformPoint(atomo.transform.position);
+        float distanzaDalPiano = Mathf.Abs(p.z) * rect.lossyScale.z;
 
-        // Basta che UN atomo qualsiasi della molecola sia dentro la zona.
-        foreach (Atomo a in rilasciato.OttieniMolecola())
-        {
-            if (!ContienePunto(a.transform.position)) continue;
-            StartCoroutine(EliminaDopoUnFrame(rilasciato));
-            return;
-        }
-    }
-
-    private bool ContienePunto(Vector3 punto)
-    {
-        return (zona.ClosestPoint(punto) - punto).sqrMagnitude < 1e-6f;
-    }
-
-    private IEnumerator EliminaDopoUnFrame(Atomo atomo)
-    {
-        // Attende un frame: l'SDK di grab deve finire di processare il
-        // rilascio prima che l'oggetto afferrato venga distrutto.
-        yield return null;
-        if (atomo == null) yield break;
-
-        atomo.DistruggiMolecola();
+        return distanzaDalPiano <= profondita && rect.rect.Contains(new Vector2(p.x, p.y));
     }
 }
