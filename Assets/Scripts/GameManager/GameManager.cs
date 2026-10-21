@@ -324,6 +324,7 @@ public class GameManager : MonoBehaviour
     // Uscita da Sandbox o Mission verso la scelta modalità
     public void GoToModeSelect()
     {
+        PulisciScena();
         ChangeState(GameState.ModeSelect);
     }
 

@@ -7281,7 +7281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce16840729f42241ae5a00e9ec9c2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  startState: 2
+  startState: 0
   currentState: 0
   missionPhase: 0
   startUI: {fileID: 8780741156688414485}
