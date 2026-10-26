@@ -29,15 +29,19 @@ public class LegameVisuale : MonoBehaviour
         ordineLegame = ordine;
 
         // Il GameObject corrente fungerà da "container" e userà la mesh del primo cilindro.
+        //cilindriVisivi.Clear();
         cilindriVisivi.Add(this.transform);
 
-        // Se l'ordine è 2 o 3, generiamo cilindri addizionali
+        // Se l'ordine è 2 o 3, generiamo cilindri addizionali come FIGLI di questo GameObject
         for (int i = 1; i < ordineLegame; i++)
         {
             GameObject cilindroExtra = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             
             // Rimuovi eventuali collider (puramente visivo)
             Destroy(cilindroExtra.GetComponent<Collider>());
+
+            // Assegna il cilindro extra come figlio di QUESTO transform
+            cilindroExtra.transform.SetParent(this.transform, false);
             
             // Applica il materiale del genitore (se presente)
             MeshRenderer rendererGenitore = GetComponent<MeshRenderer>();
@@ -52,23 +56,30 @@ public class LegameVisuale : MonoBehaviour
 
     public void ImpostaGenitore(Transform genitore)
     {
-        foreach (var cil in cilindriVisivi)
+        // Spostiamo solo il GameObject radice: i cilindri figli lo seguiranno automaticamente
+        if (genitore != null)
         {
-            cil.SetParent(genitore, true);
+            transform.SetParent(genitore, true);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // Garanzia: quando il LegameVisuale viene distrutto, distrugge esplicitamente tutti i cilindri extra
+        for (int i = 1; i < cilindriVisivi.Count; i++)
+        {
+            if (cilindriVisivi[i] != null)
+            {
+                Destroy(cilindriVisivi[i].gameObject);
+            }
         }
     }
 
     private void LateUpdate()
     {
+        // Se uno dei due atomi è stato distrutto, distrugge l'intero oggetto del legame
         if (atomoA == null || atomoB == null)
         {
-            for (int i = 1; i < ordineLegame; i++)
-            {
-                if (cilindriVisivi[i] != null)
-                {
-                    Destroy(cilindriVisivi[i].gameObject);
-                }
-            }
             Destroy(gameObject);
             return;
         }
@@ -90,6 +101,7 @@ public class LegameVisuale : MonoBehaviour
         for (int i = 0; i < cilindriVisivi.Count; i++)
         {
             Transform cil = cilindriVisivi[i];
+            if (cil == null) continue;
             
             float offsetMultiplier = 0f;
 
@@ -114,7 +126,10 @@ public class LegameVisuale : MonoBehaviour
             cil.rotation = rotazioneCilindri;
             
             // Scala Y adatta all'altezza
-            cil.localScale = new Vector3(spessoreCilindro, distanza * 0.5f, spessoreCilindro);
+            if (cil == this.transform)
+            {
+                cil.localScale = new Vector3(spessoreCilindro, distanza * 0.5f, spessoreCilindro);
+            }
         }
     }
 }

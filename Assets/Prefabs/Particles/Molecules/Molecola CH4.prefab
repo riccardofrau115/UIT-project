@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 09a83718-665e-4a5a-820f-c891acd500d0
+  instanceId: 825b57f4-5e66-488f-bbdc-45e7b0d3796b
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -300,12 +300,16 @@ MonoBehaviour:
   prefabCilindroLegame: {fileID: 1894789118338399641, guid: 911c98c85e31e0440937e11fe8556a47, type: 3}
   distanzaLegame: 0.15
   allineaAllaConnessione: 1
+  scollegaAzione: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  forzaRotturaLegame: 1000
+  avanzaOrdineAzione: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   legamiAttivi:
   - altroAtomo: {fileID: 2622792556189056384}
     cilindroVisivo: {fileID: 38632001316485579}
     joint: {fileID: 0}
     indiceSlot: 0
     ordine: 1
+    eAncoraFisica: 0
 --- !u!135 &6989918709318295873
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -595,7 +599,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: a9c7d904-3733-4051-941c-dad21601737c
+  instanceId: 3744a566-8c69-4ede-84c6-c2e6b5b392c7
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -751,7 +755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 96e8edf7-be3f-4960-a075-b936a676bcff
+  instanceId: 6fa3c700-b5de-45b2-9a6a-292d1eabc733
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -907,7 +911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 6a1c6e2b-9e52-4b3b-a1a0-6aa6abf901e6
+  instanceId: 30f85fb0-1f24-4c32-bd29-f66646338d45
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -1063,7 +1067,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: f094e8b7-867e-407d-87ec-e01548360d14
+  instanceId: b7e3ede0-5da3-44aa-8252-c69dccfdf44f
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -1227,7 +1231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 8507aed4-b8f5-4029-81df-1a3e3cb48e06
+  instanceId: c7ef9831-cbad-4978-b4c5-a5da7e5660c2
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -1308,12 +1312,16 @@ MonoBehaviour:
   prefabCilindroLegame: {fileID: 1894789118338399641, guid: 911c98c85e31e0440937e11fe8556a47, type: 3}
   distanzaLegame: 0.15
   allineaAllaConnessione: 1
+  scollegaAzione: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  forzaRotturaLegame: 1000
+  avanzaOrdineAzione: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   legamiAttivi:
   - altroAtomo: {fileID: 2622792556189056384}
     cilindroVisivo: {fileID: 5852709220781446118}
     joint: {fileID: 0}
     indiceSlot: 0
     ordine: 1
+    eAncoraFisica: 0
 --- !u!135 &1124308060308855525
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1603,7 +1611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 7bf78720-c5c0-4080-b394-57bae1dc00c3
+  instanceId: 0016494c-7f9d-4c14-a59c-2774519afb5a
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -1771,7 +1779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 0c20fe0e-17a6-4eb6-816f-80d851e9ffc5
+  instanceId: 939426b1-ad8a-4d71-b227-83d8ecfdbe39
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -1852,27 +1860,34 @@ MonoBehaviour:
   prefabCilindroLegame: {fileID: 1894789118338399641, guid: 911c98c85e31e0440937e11fe8556a47, type: 3}
   distanzaLegame: 0.15
   allineaAllaConnessione: 1
+  scollegaAzione: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  forzaRotturaLegame: 1000
+  avanzaOrdineAzione: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   legamiAttivi:
   - altroAtomo: {fileID: 8365715032851897371}
     cilindroVisivo: {fileID: 8809160528745487328}
     joint: {fileID: 3662584075820817075}
     indiceSlot: 2
     ordine: 1
+    eAncoraFisica: 1
   - altroAtomo: {fileID: 3478502493506161267}
     cilindroVisivo: {fileID: 38632001316485579}
     joint: {fileID: 385654432888076027}
     indiceSlot: 1
     ordine: 1
+    eAncoraFisica: 1
   - altroAtomo: {fileID: 3963399894133582209}
     cilindroVisivo: {fileID: 1858208035725692225}
     joint: {fileID: 4970138473706301557}
     indiceSlot: 0
     ordine: 1
+    eAncoraFisica: 1
   - altroAtomo: {fileID: 6580658534449473808}
     cilindroVisivo: {fileID: 5852709220781446118}
     joint: {fileID: 3800701300661799728}
     indiceSlot: 3
     ordine: 1
+    eAncoraFisica: 1
 --- !u!135 &2198711728478355678
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2014,8 +2029,8 @@ FixedJoint:
   serializedVersion: 1
   m_ConnectedBody: {fileID: 4275683559634992254}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
+  m_BreakForce: 1000
+  m_BreakTorque: 1000
   m_EnableCollision: 0
   m_EnablePreprocessing: 1
   m_MassScale: 1
@@ -2030,8 +2045,8 @@ FixedJoint:
   serializedVersion: 1
   m_ConnectedBody: {fileID: 3313578130171796318}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
+  m_BreakForce: 1000
+  m_BreakTorque: 1000
   m_EnableCollision: 0
   m_EnablePreprocessing: 1
   m_MassScale: 1
@@ -2046,8 +2061,8 @@ FixedJoint:
   serializedVersion: 1
   m_ConnectedBody: {fileID: 2559898156414032671}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
+  m_BreakForce: 1000
+  m_BreakTorque: 1000
   m_EnableCollision: 0
   m_EnablePreprocessing: 1
   m_MassScale: 1
@@ -2062,8 +2077,8 @@ FixedJoint:
   serializedVersion: 1
   m_ConnectedBody: {fileID: 1896068559572898428}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
+  m_BreakForce: 1000
+  m_BreakTorque: 1000
   m_EnableCollision: 0
   m_EnablePreprocessing: 1
   m_MassScale: 1
@@ -2124,7 +2139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 4062cca5-8ccc-431f-be4a-3a17dc11b9fa
+  instanceId: 74898f5e-d030-4dea-b844-08f77349199c
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -2205,12 +2220,16 @@ MonoBehaviour:
   prefabCilindroLegame: {fileID: 1894789118338399641, guid: 911c98c85e31e0440937e11fe8556a47, type: 3}
   distanzaLegame: 0.15
   allineaAllaConnessione: 1
+  scollegaAzione: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  forzaRotturaLegame: 1000
+  avanzaOrdineAzione: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   legamiAttivi:
   - altroAtomo: {fileID: 2622792556189056384}
     cilindroVisivo: {fileID: 8809160528745487328}
     joint: {fileID: 0}
     indiceSlot: 0
     ordine: 1
+    eAncoraFisica: 0
 --- !u!135 &1737475214538088675
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2508,7 +2527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: b89c4f1c-58e3-4eb2-8a7c-54dfaa0758d0
+  instanceId: a754b25b-ce26-4167-80fe-dae64e4a8975
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -2589,12 +2608,16 @@ MonoBehaviour:
   prefabCilindroLegame: {fileID: 1894789118338399641, guid: 911c98c85e31e0440937e11fe8556a47, type: 3}
   distanzaLegame: 0.15
   allineaAllaConnessione: 1
+  scollegaAzione: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  forzaRotturaLegame: 1000
+  avanzaOrdineAzione: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   legamiAttivi:
   - altroAtomo: {fileID: 2622792556189056384}
     cilindroVisivo: {fileID: 1858208035725692225}
     joint: {fileID: 0}
     indiceSlot: 0
     ordine: 1
+    eAncoraFisica: 0
 --- !u!135 &831277702692367837
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -1017,8 +1017,18 @@
             "actions": [
                 {
                     "name": "Bond switch",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "dec8e14f-4e68-4628-b08f-46de41699af3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Unbond",
+                    "type": "PassThrough",
+                    "id": "34f02040-a396-48c8-a3c9-d57db2c0751f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -1030,11 +1040,55 @@
                 {
                     "name": "",
                     "id": "8ac2a6ee-79c7-495e-b9b1-629d9c3a3875",
+                    "path": "<HandInteractionPoses>{LeftHand}/{Pinch}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Bond switch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "22881be9-5ec4-4c57-9768-361fa622e2e2",
                     "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Bond switch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e23596b-e0d5-4d07-8718-27d15a76c01e",
+                    "path": "<XRController>{LeftHand}/{PrimaryAction}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Bond switch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cdc6e69e-4c7c-4e1c-b39a-31412e1cb54c",
+                    "path": "<XRController>{LeftHand}/{TriggerButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Unbond",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "84e74dbf-30dd-48e7-8b35-b042b92c029a",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Unbond",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -33,7 +33,6 @@ Transform:
   - {fileID: 4909508696358851522}
   - {fileID: 2408207231343332897}
   - {fileID: 5482786446199875950}
-  - {fileID: 1166262721712635551}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5369899412994979055
@@ -96,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 76920de3-94b4-4ab7-be11-3611f73a7679
+  instanceId: c598a73a-0ef7-43c6-a676-389ba36a4128
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -261,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 350114f8-97fd-456a-8957-fe88d0e3da1b
+  instanceId: 009d83d2-c128-44ef-8ebe-091da5ed728e
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -342,12 +341,16 @@ MonoBehaviour:
   prefabCilindroLegame: {fileID: 1894789118338399641, guid: 911c98c85e31e0440937e11fe8556a47, type: 3}
   distanzaLegame: 0.15
   allineaAllaConnessione: 1
+  scollegaAzione: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  forzaRotturaLegame: 1000
+  avanzaOrdineAzione: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   legamiAttivi:
   - altroAtomo: {fileID: 7311414217362527803}
     cilindroVisivo: {fileID: 7017686762252894866}
     joint: {fileID: 5269275412058402131}
     indiceSlot: 2
     ordine: 2
+    eAncoraFisica: 1
 --- !u!135 &3312764101010691011
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -489,8 +492,8 @@ FixedJoint:
   serializedVersion: 1
   m_ConnectedBody: {fileID: 4567382058835121041}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
+  m_BreakForce: 1000
+  m_BreakTorque: 1000
   m_EnableCollision: 0
   m_EnablePreprocessing: 1
   m_MassScale: 1
@@ -521,12 +524,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3915223292450330283}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5434052, y: -0, z: 0.04371123, w: 0.83833176}
-  m_LocalPosition: {x: 0.06737616, y: 1.2881949, z: -2.1528707}
-  m_LocalScale: {x: 0.015, y: 0.07499995, z: 0.015}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.6580827, y: 0, z: -0.2138144}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1599887360737117848}
+  m_Father: {fileID: 5482786446199875950}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3597859418659967372
 MeshFilter:
@@ -633,7 +636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 5f9a7a91-8cc8-4ec0-9e3a-a6cd7817ac9e
+  instanceId: 3f0c8edf-dccb-4f08-8b0a-86fb37d495d8
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -797,7 +800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: cfd750ea-7c90-45c3-bc79-f42ffcf5ac06
+  instanceId: 700ce86a-f638-4d05-affa-f1db59d7e3de
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -878,12 +881,16 @@ MonoBehaviour:
   prefabCilindroLegame: {fileID: 1894789118338399641, guid: 911c98c85e31e0440937e11fe8556a47, type: 3}
   distanzaLegame: 0.15
   allineaAllaConnessione: 1
+  scollegaAzione: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  forzaRotturaLegame: 1000
+  avanzaOrdineAzione: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   legamiAttivi:
   - altroAtomo: {fileID: 4896787870951495432}
     cilindroVisivo: {fileID: 7017686762252894866}
     joint: {fileID: 0}
     indiceSlot: 3
     ordine: 2
+    eAncoraFisica: 0
 --- !u!135 &110086123009195279
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1046,7 +1053,8 @@ Transform:
   m_LocalPosition: {x: 0.107247375, y: 1.2881949, z: -2.1496634}
   m_LocalScale: {x: 0.015, y: 0.07499995, z: 0.015}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1166262721712635551}
   m_Father: {fileID: 1599887360737117848}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3903099278393377624

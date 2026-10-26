@@ -31,8 +31,6 @@ using UnityEngine.InputSystem; // Necessario per InputActionReference
 ///   primo: e' la "zona di legame" usata per rilevare atomi vicini.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-
-
 public class Atomo : MonoBehaviour
 {
     [Header("Identita' chimica")]
@@ -69,9 +67,16 @@ public class Atomo : MonoBehaviour
              "punto esatto in cui viene lasciata (nessuna inerzia/lancio)")] */
     private bool fermaAlRilascio = true;
 
-    /* [Header("Input Legami Multipli")]
+    [Header("Rottura Legami")]
+    [Tooltip("Azione per scollegare l'atomo impugnato (es. Grilletto del controller)")]
+    public InputActionReference scollegaAzione;
+    
+    [Tooltip("Forza necessaria per strappare un legame tirando. Usa Infinity per non romperli fisicamente.")]
+    public float forzaRotturaLegame = 1000f; // 1000f è un buon valore di partenza da bilanciare in VR
+
+    [Header("Input Legami Multipli")]
     [Tooltip("Azione per cambiare il tipo di legame (es. Pinch con il medio, Tasto A/X del controller).")]
-    public InputActionReference avanzaOrdineAzione; */
+    public InputActionReference avanzaOrdineAzione;
     
     [Header("Debug (sola lettura)")]
     [SerializeField]
@@ -165,6 +170,7 @@ public class Atomo : MonoBehaviour
         // Indice dello slot geometrico occupato da questo legame.
         public int indiceSlot;
         public int ordine; // Nuovo: traccia se è singolo(1), doppio(2) o triplo(3)
+        public bool eAncoraFisica;
     }
 
     private void Awake()
@@ -180,11 +186,17 @@ public class Atomo : MonoBehaviour
             grabbable.WhenPointerEventRaised += GestisciEventoPuntatore;
         }
 
-        /* if (avanzaOrdineAzione != null)
+        if (scollegaAzione != null)
+        {
+            scollegaAzione.action.Enable();
+            scollegaAzione.action.performed += OnScollegaInput;
+        }
+
+        if (avanzaOrdineAzione != null)
         {
             avanzaOrdineAzione.action.Enable();
             avanzaOrdineAzione.action.performed += OnAvanzaOrdineInput;
-        } */
+        }
     }
 
     private void OnDestroy()
@@ -193,20 +205,95 @@ public class Atomo : MonoBehaviour
         {
             grabbable.WhenPointerEventRaised -= GestisciEventoPuntatore;
         }
+
+        if (scollegaAzione != null)
+        {
+            scollegaAzione.action.performed -= OnScollegaInput;
+        }
         
-        /* if (avanzaOrdineAzione != null)
+        if (avanzaOrdineAzione != null)
         {
             avanzaOrdineAzione.action.performed -= OnAvanzaOrdineInput;
-        } */
+        }
     }
 
     private void Update()
     {
-        Debug.Log($"[{simbolo}] inMano: {inMano}, Keyboard.current: {Keyboard.current}, bKey: {Keyboard.current?.bKey} wasPressedThisFrame: {Keyboard.current?.bKey.wasPressedThisFrame}");
         // Debug da tastiera per l'Editor (compatibile con il nuovo Input System)
         if (inMano && Keyboard.current!= null && Keyboard.current.bKey.wasPressedThisFrame)
         {
-            Debug.Log($"B premuto per {simbolo}");
+            //Debug.Log($"B premuto per {simbolo}");
+            GestoreOrdineLegame.Instance.AvanzaOrdineLegame();
+        }
+        //Debug.Log($"[DEBUG] {simbolo} ha {legamiAttivi.Count} legami attivi, eAncoraFisica: {legamiAttivi.Exists(l => l.eAncoraFisica)}");
+
+        int maniAttive = AtomiImpugnati();
+        float limiteForza = (maniAttive >= 2) ? forzaRotturaLegame : Mathf.Infinity;
+
+        // Controlla dal retro per poter rimuovere elementi in sicurezza dalla lista
+        for (int i = legamiAttivi.Count - 1; i >= 0; i--)
+        {
+            var legame = legamiAttivi[i];
+            //Debug.Log($"[DEBUG] {simbolo} ha legame con {legame.altroAtomo.simbolo}, joint: {(legame.joint != null ? "presente" : "null")}, eAncoraFisica: {legame.eAncoraFisica}");
+            
+            // Se eravamo noi a generare la fisica del legame, 
+            // e il joint di Unity risulta "null" (perché Unity lo ha distrutto per troppa forza fisica)
+            if (legame.eAncoraFisica)
+            {
+                //Debug.Log($"[DEBUG] [FISICA] {simbolo} ha un legame fisico con {legame.altroAtomo.simbolo}");
+                // 1. STAMPA LA FORZA CORRENTE DEL JOINT
+                if (legame.joint != null)
+                {
+                    // Aggiorna dinamicamente la resistenza del joint
+                    legame.joint.breakForce = limiteForza;
+                    legame.joint.breakTorque = limiteForza;
+
+                    float forzaAttuale = legame.joint.currentForce.magnitude;
+
+                    // Logghiamo la forza solo quando l'atomo è in mano e c'è una minima tensione (> 1.0f)
+                    // per evitare di intasare la Console quando gli atomi sono fermi
+                    if (inMano && forzaAttuale > 1.0f)
+                    {
+                        //Debug.Log($"[DEBUG] [FORZA JOINT] {simbolo} <-> {legame.altroAtomo.simbolo}: {forzaAttuale:F1} N / Max: {forzaRotturaLegame} N");
+                    }
+                }
+                // 2. SE IL JOINT SI È SPEZZATO PER LA FISICA
+                else
+                {
+                    // La fisica lo ha spezzato, quindi puliamo la logica e la visualizzazione!
+                    Atomo altro = legame.altroAtomo;
+                    
+                    // Separa la logica e la grafica
+                    ScollegaDa(altro);
+
+                    // Azzera immediatamente le forze accumulate (Effetto Fionda)
+                    this.AzzeraVelocita();
+                    if (altro != null)
+                    {
+                        altro.AzzeraVelocita();
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Conta quanti atomi della molecola sono attualmente afferrati dall'utente.
+    /// </summary>
+    public int AtomiImpugnati()
+    {
+        int count = 0;
+        foreach (var atomo in OttieniMolecola())
+        {
+            if (atomo.inMano) count++;
+        }
+        return count;
+    }
+
+    private void OnAvanzaOrdineInput(InputAction.CallbackContext context)
+    {
+        if (inMano)
+        {
             GestoreOrdineLegame.Instance.AvanzaOrdineLegame();
         }
     }
@@ -426,8 +513,8 @@ public class Atomo : MonoBehaviour
         // posa relativa corretta tra i due atomi.
         FixedJoint joint = gameObject.AddComponent<FixedJoint>();
         joint.connectedBody = altro.rb;
-        joint.breakForce = Mathf.Infinity;
-        joint.breakTorque = Mathf.Infinity;
+        joint.breakForce = forzaRotturaLegame;
+        joint.breakTorque = forzaRotturaLegame;
  
         GameObject cilindro = null;
         Transform contenitore = AggiornaContenitoreMolecola(this, altro);
@@ -446,7 +533,8 @@ public class Atomo : MonoBehaviour
             cilindroVisivo = cilindro,
             joint = joint,
             indiceSlot = slotQuesto,
-            ordine = ordineEffettivo
+            ordine = ordineEffettivo,
+            eAncoraFisica = true
         });
         
         altro.RegistraLegameRicevuto(this, cilindro, slotAltro, ordineEffettivo);
@@ -498,7 +586,8 @@ public class Atomo : MonoBehaviour
             cilindroVisivo = cilindro,
             joint = null,
             indiceSlot = indiceSlot,
-            ordine = ordine
+            ordine = ordine,
+            eAncoraFisica = false
         });
     }
 
@@ -525,6 +614,61 @@ public class Atomo : MonoBehaviour
             }
         }
         return visitati;
+    }
+
+    /// <summary>
+    /// Rompe il legame tra questo atomo e un altro specifico.
+    /// </summary>
+    public void ScollegaDa(Atomo altro)
+    {
+        // 1. Trova il legame nella lista di questo atomo
+        int indexQuesto = legamiAttivi.FindIndex(l => l.altroAtomo == altro);
+        if (indexQuesto == -1) return; // Non sono legati
+
+        Legame legameQuesto = legamiAttivi[indexQuesto];
+
+        // 2. Trova il legame nella lista dell'altro atomo
+        int indexAltro = altro.legamiAttivi.FindIndex(l => l.altroAtomo == this);
+        
+        // 3. Distruggi i joint fisici se esistono
+        if (legameQuesto.joint != null) Destroy(legameQuesto.joint);
+        if (indexAltro != -1 && altro.legamiAttivi[indexAltro].joint != null) 
+        {
+            Destroy(altro.legamiAttivi[indexAltro].joint);
+        }
+
+        // 4. Distruggi i cilindri visivi. (Essendo gameObject a parte, non sparirebbero da soli)
+        if (legameQuesto.cilindroVisivo != null) Destroy(legameQuesto.cilindroVisivo);
+
+        // 5. Rimuovi i legami dalle rispettive liste
+        legamiAttivi.RemoveAt(indexQuesto);
+        if (indexAltro != -1) altro.legamiAttivi.RemoveAt(indexAltro);
+
+        Debug.Log($"Legame spezzato tra {simbolo} e {altro.simbolo}");
+    }
+
+    /// <summary>
+    /// Rompe tutti i legami dell'atomo corrente
+    /// </summary>
+    public void ScollegaTuttiILegami()
+    {
+        // Lavoriamo su una copia della lista per evitare errori mentre gli elementi vengono rimossi
+        List<Atomo> daScollegare = new List<Atomo>();
+        foreach (var l in legamiAttivi) daScollegare.Add(l.altroAtomo);
+
+        foreach (var altro in daScollegare)
+        {
+            ScollegaDa(altro);
+        }
+    }
+
+    private void OnScollegaInput(InputAction.CallbackContext context)
+    {
+        // Se stiamo tenendo l'atomo in mano e premiamo il tasto (es. Grilletto), scolleghiamo tutto
+        if (inMano)
+        {
+            ScollegaTuttiILegami();
+        }
     }
 
     /// <summary>

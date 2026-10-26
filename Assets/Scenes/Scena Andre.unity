@@ -4561,8 +4561,40 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 513366511213706879, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2622792556189056384, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 2622792556189056384, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 3478502493506161267, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 3478502493506161267, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 3963399894133582209, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 3963399894133582209, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 6580658534449473808, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 6580658534449473808, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 6847950387276394822, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.526
@@ -4603,6 +4635,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8365715032851897371, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 8365715032851897371, guid: 5b09a15930c7c3b4581f3d3c8b99fcba, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4656,9 +4696,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2457218378544076132, guid: fb6c69299a2989048949030951cfdda0, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 2457218378544076132, guid: fb6c69299a2989048949030951cfdda0, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 3514724230252616229, guid: fb6c69299a2989048949030951cfdda0, type: 3}
       propertyPath: m_Name
       value: Molecola COH2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4887406749708837070, guid: fb6c69299a2989048949030951cfdda0, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 4887406749708837070, guid: fb6c69299a2989048949030951cfdda0, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 5854223275647525083, guid: fb6c69299a2989048949030951cfdda0, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 5854223275647525083, guid: fb6c69299a2989048949030951cfdda0, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 8626963332226570949, guid: fb6c69299a2989048949030951cfdda0, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 8626963332226570949, guid: fb6c69299a2989048949030951cfdda0, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 8626963332226570949, guid: fb6c69299a2989048949030951cfdda0, type: 3}
+      propertyPath: legamiAttivi.Array.data[1].eAncoraFisica
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4679,7 +4755,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 24321078783444641, guid: 48ea977b97fe2bf4cbf11809f34d223a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1599887360737117848, guid: 48ea977b97fe2bf4cbf11809f34d223a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4721,6 +4797,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4896787870951495432, guid: 48ea977b97fe2bf4cbf11809f34d223a, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 4896787870951495432, guid: 48ea977b97fe2bf4cbf11809f34d223a, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 7311414217362527803, guid: 48ea977b97fe2bf4cbf11809f34d223a, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 7311414217362527803, guid: 48ea977b97fe2bf4cbf11809f34d223a, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4734,6 +4826,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4270871920623521285, guid: dbd07871296ab534b831300416b59fbf, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 4270871920623521285, guid: dbd07871296ab534b831300416b59fbf, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 6283281819345331797, guid: dbd07871296ab534b831300416b59fbf, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 6283281819345331797, guid: dbd07871296ab534b831300416b59fbf, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 7398954680385120636, guid: dbd07871296ab534b831300416b59fbf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4774,13 +4882,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8720751131327159098, guid: dbd07871296ab534b831300416b59fbf, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 8720751131327159098, guid: dbd07871296ab534b831300416b59fbf, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 8744754794039159520, guid: dbd07871296ab534b831300416b59fbf, type: 3}
       propertyPath: m_Name
       value: Molecola H2O
       objectReference: {fileID: 0}
     - target: {fileID: 8744754794039159520, guid: dbd07871296ab534b831300416b59fbf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4835,13 +4951,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2083475190785051882, guid: 9c2e7abcf4ef8984ca16b812826f794f, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 2083475190785051882, guid: 9c2e7abcf4ef8984ca16b812826f794f, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 2134483297697165566, guid: 9c2e7abcf4ef8984ca16b812826f794f, type: 3}
+      propertyPath: scollegaAzione
+      value: 
+      objectReference: {fileID: 5885752832646782719, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 2134483297697165566, guid: 9c2e7abcf4ef8984ca16b812826f794f, type: 3}
+      propertyPath: avanzaOrdineAzione
+      value: 
+      objectReference: {fileID: -6133386150020701916, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 7492229117656287014, guid: 9c2e7abcf4ef8984ca16b812826f794f, type: 3}
       propertyPath: m_Name
       value: Molecola N2
       objectReference: {fileID: 0}
     - target: {fileID: 7492229117656287014, guid: 9c2e7abcf4ef8984ca16b812826f794f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
