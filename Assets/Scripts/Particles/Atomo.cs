@@ -84,6 +84,7 @@ public class Atomo : MonoBehaviour
 
     // AGGIUNGI QUESTA RIGA: Evento globale per notificare il rilascio di un atomo
     public static event System.Action<Atomo> AtomoRilasciato;
+    public static event System.Action<Atomo> AtomoAfferrato;
 
     private Rigidbody rb;
     private Grabbable grabbable;
@@ -93,7 +94,7 @@ public class Atomo : MonoBehaviour
     // ------------------------------------------------------------------
     // Geometria: direzioni degli slot in spazio locale
     // ------------------------------------------------------------------
-    
+
     private static readonly Vector3[] DirezioniUno = { Vector3.forward };
     private static readonly Vector3[] DirezioniLineari = { Vector3.forward, Vector3.back };
     private static readonly Vector3[] DirezioniTrigonali = {
@@ -122,7 +123,7 @@ public class Atomo : MonoBehaviour
     // ------------------------------------------------------------------
     // Proprieta' chimiche derivate
     // ------------------------------------------------------------------
- 
+
     /// <summary>
     /// Numero massimo di legami singoli. Regola dell'ottetto semplificata:
     /// 8 - elettroni di valenza (limitato a 4); l'idrogeno segue il duetto
@@ -220,7 +221,7 @@ public class Atomo : MonoBehaviour
     private void Update()
     {
         // Debug da tastiera per l'Editor (compatibile con il nuovo Input System)
-        if (inMano && Keyboard.current!= null && Keyboard.current.bKey.wasPressedThisFrame)
+        if (inMano && Keyboard.current != null && Keyboard.current.bKey.wasPressedThisFrame)
         {
             //Debug.Log($"B premuto per {simbolo}");
             GestoreOrdineLegame.Instance.AvanzaOrdineLegame();
@@ -303,12 +304,13 @@ public class Atomo : MonoBehaviour
         if (evento.Type == PointerEventType.Select)
         {
             inMano = true;
+            AtomoAfferrato?.Invoke(this);
         }
         else if (evento.Type == PointerEventType.Cancel || evento.Type == PointerEventType.Unselect)
         {
             inMano = false;
             //ResetOrdine(); // Reset a singolo quando si rilascia l'atomo
-            
+
             if (evento.Type == PointerEventType.Unselect)
             {
                 // AGGIUNGI QUESTA RIGA per avvisare la ZonaCestino
@@ -343,7 +345,7 @@ public class Atomo : MonoBehaviour
     {
         foreach (var atomo in OttieniMolecola()) atomo.AzzeraVelocita();
     }
- 
+
     private void AzzeraVelocita()
     {
         if (rb == null || rb.isKinematic) return;
@@ -359,7 +361,7 @@ public class Atomo : MonoBehaviour
         foreach (var atomo in OttieniMolecola()) if (atomo.inMano) return true;
         return false;
     }
- 
+
     // ------------------------------------------------------------------
     // Formazione del legame
     // ------------------------------------------------------------------
@@ -386,7 +388,7 @@ public class Atomo : MonoBehaviour
     {
         if (altro == null || altro == this) return false;
         if (SonoGiaLegati(altro)) return false;
-        
+
         // Verifica in base alle valenze libere rimanenti
         if (ValenzeLibere <= 0 || altro.ValenzeLibere <= 0) return false;
         if (OttieniMolecola().Contains(altro)) return false;
@@ -417,7 +419,7 @@ public class Atomo : MonoBehaviour
         Vector3[] direzioni = DirezioniPerSterico(NumeroSterico);
         int migliore = -1;
         float miglioreAllineamento = -2f;
- 
+
         for (int i = 0; i < direzioni.Length; i++)
         {
             if (SlotOccupato(i)) continue;
@@ -468,7 +470,7 @@ public class Atomo : MonoBehaviour
             for (int i = contenitoreB.childCount - 1; i >= 0; i--)
             {
                 contenitoreA.name += $"-{contenitoreB.GetChild(i).GetComponent<Atomo>().simbolo}";
-                contenitoreB.GetChild(i).SetParent(contenitoreA, true);   
+                contenitoreB.GetChild(i).SetParent(contenitoreA, true);
             }
             Destroy(contenitoreB.gameObject);
         }
@@ -494,21 +496,21 @@ public class Atomo : MonoBehaviour
         Vector3 versoMobile = mobile.transform.position - ancora.transform.position;
         if (versoMobile.sqrMagnitude < 1e-8f) versoMobile = Vector3.forward;
         versoMobile.Normalize();
- 
+
         int slotAncora = ancora.SlotLiberoPiuVicino(versoMobile);
         int slotMobile = mobile.SlotLiberoPiuVicino(-versoMobile);
-        
+
         // Se non ci sono slot fisici liberi (nonostante le valenze), fallback a non legare
         if (slotAncora < 0 || slotMobile < 0) return false;
- 
+
         if (allineaAllaConnessione)
         {
             ancora.AllineaGruppo(mobile, slotAncora, slotMobile);
         }
- 
+
         int slotQuesto = (ancora == this) ? slotAncora : slotMobile;
         int slotAltro = (ancora == this) ? slotMobile : slotAncora;
- 
+
         // Joint fisico: creato DOPO il riposizionamento, cosi' blocca la
         // posa relativa corretta tra i due atomi.
         FixedJoint joint = gameObject.AddComponent<FixedJoint>();
@@ -527,8 +529,9 @@ public class Atomo : MonoBehaviour
             visuale.Imposta(transform, altro.transform, ordineEffettivo);
             visuale.ImpostaGenitore(contenitore);
         }
- 
-        legamiAttivi.Add(new Legame {
+
+        legamiAttivi.Add(new Legame
+        {
             altroAtomo = altro,
             cilindroVisivo = cilindro,
             joint = joint,
@@ -536,7 +539,7 @@ public class Atomo : MonoBehaviour
             ordine = ordineEffettivo,
             eAncoraFisica = true
         });
-        
+
         altro.RegistraLegameRicevuto(this, cilindro, slotAltro, ordineEffettivo);
 
         // Reset ordine dei legami
@@ -556,12 +559,12 @@ public class Atomo : MonoBehaviour
     {
         Vector3 dirAncora = transform.TransformDirection(DirezioniPerSterico(NumeroSterico)[slotAncora]);
         Vector3 dirMobile = mobile.transform.TransformDirection(DirezioniPerSterico(mobile.NumeroSterico)[slotMobile]);
- 
+
         Quaternion rotazione = Quaternion.FromToRotation(dirMobile, -dirAncora);
         Vector3 perno = mobile.transform.position;
         Vector3 nuovaPosizioneMobile = transform.position + dirAncora * distanzaLegame;
         Vector3 traslazione = nuovaPosizioneMobile - perno;
- 
+
         foreach (var atomo in mobile.OttieniMolecola())
         {
             Vector3 nuovaPos = perno + rotazione * (atomo.transform.position - perno) + traslazione;
@@ -569,7 +572,7 @@ public class Atomo : MonoBehaviour
             atomo.transform.SetPositionAndRotation(nuovaPos, nuovaRot);
             atomo.AzzeraVelocita();
         }
- 
+
         // Sincronizza i Rigidbody con i Transform appena modificati prima
         // di creare il joint.
         Physics.SyncTransforms();
@@ -581,7 +584,8 @@ public class Atomo : MonoBehaviour
     /// </summary>
     internal void RegistraLegameRicevuto(Atomo altro, GameObject cilindro, int indiceSlot, int ordine)
     {
-        legamiAttivi.Add(new Legame {
+        legamiAttivi.Add(new Legame
+        {
             altroAtomo = altro,
             cilindroVisivo = cilindro,
             joint = null,
