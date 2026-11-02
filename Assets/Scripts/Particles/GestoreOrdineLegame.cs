@@ -11,13 +11,21 @@ public class GestoreOrdineLegame : MonoBehaviour
     private void Awake() => Instance = this;
 
 
-    public void AvanzaOrdineLegame() { 
+    public void AvanzaOrdineLegame()
+    {
         ordineRichiesto = ordineRichiesto % 3 + 1;
         OnOrdineCambiato?.Invoke(ordineRichiesto);
     }
-    
-    public void ResetOrdine() { 
+
+    public void ResetOrdine()
+    {
         ordineRichiesto = 1;
         OnOrdineCambiato?.Invoke(ordineRichiesto);
-        }
+    }
+
+    public int GetOrdineRichiesto()
+    {
+        return ordineRichiesto;
+
+    }
 }

@@ -28,13 +28,11 @@ public class CanvasGroupFader : MonoBehaviour
     }
 
     void Update()
-    {
-        float target = visible ? 1f : 0f;
-        if (Mathf.Approximately(canvasGroup.alpha, target)) return;
+{
+    float target = visible ? 1f : 0f;
+    if (Mathf.Approximately(canvasGroup.alpha, target)) return;
 
-        canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, target,
-                                       animationSpeed * Time.deltaTime);
-        if (Mathf.Abs(canvasGroup.alpha - target) < 0.01f)
-            canvasGroup.alpha = target;
-    }
+    canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, target,
+                                          animationSpeed * Time.deltaTime);
+}
 }

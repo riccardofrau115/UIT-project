@@ -543,7 +543,7 @@ public class Atomo : MonoBehaviour
         altro.RegistraLegameRicevuto(this, cilindro, slotAltro, ordineEffettivo);
 
         // Reset ordine dei legami
-        GestoreOrdineLegame.Instance?.ResetOrdine();
+        //GestoreOrdineLegame.Instance?.ResetOrdine();
 
         return true;
     }

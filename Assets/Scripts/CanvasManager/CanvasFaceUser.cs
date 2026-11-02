@@ -48,7 +48,7 @@ public class CanvasFaceUser : MonoBehaviour
     private Quaternion GetDesiredRotation()
     {
         Vector3 dir = transform.position - target.position;
-        /* if (yawOnly) dir.y = 0f; */
+        if (yawOnly) dir.y = 0f;
         if (dir.sqrMagnitude < 0.0001f) return transform.rotation;
 
         // Un Canvas World Space mostra il contenuto sul lato -Z, quindi

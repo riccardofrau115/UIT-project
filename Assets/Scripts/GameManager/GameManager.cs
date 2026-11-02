@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CanvasGroupFader missionStart;
     [SerializeField] private CanvasGroupFader missionCompleted;
     [SerializeField] private CanvasGroupFader additionalInfoUI;
+    [SerializeField] private Image linkIcon;
+    [SerializeField] private Sprite[] icone;
 
     [SerializeField] private Transform tableAnchor;              // Ancoraggio sul tavolo calibrato
 
@@ -331,6 +334,15 @@ public class GameManager : MonoBehaviour
     public void GoToCalibration()
     {
         ChangeState(GameState.Calibration);
+    }
+
+    public void NextLink()
+    {
+        GestoreOrdineLegame.Instance.AvanzaOrdineLegame();
+        int ordine = GestoreOrdineLegame.Instance.GetOrdineRichiesto();
+
+        if (linkIcon && ordine >= 1 && ordine <= icone.Length)
+            linkIcon.sprite = icone[ordine - 1];
     }
 
     private void SetupCurrentMission()
